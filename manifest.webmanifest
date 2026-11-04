@@ -1,0 +1,17 @@
+{
+  "name": "Piano Piano イタリア語",
+  "short_name": "Piano Piano",
+  "description": "初心者のためのイタリア語。動詞と日常表現を少しずつ。",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FBFCFA",
+  "theme_color": "#17843A",
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

@@ -390,7 +390,7 @@ window.KOKUGO.push(
         "形容詞の語尾を合わせる",
       ],
       model:
-        "Abito a Osaka. Vicino a casa mia c'è una stazione piccola. Ci sono anche due negozi e una farmacia.",
+        "Abito a Osaka. Vicino a casa mia c'è una piccola stazione. Ci sono anche due negozi e una farmacia.",
       modelJa:
         "大阪に住んでいます。家の近くに小さな駅があります。店が2軒と薬局も1軒あります。",
       check: [
@@ -440,7 +440,7 @@ window.KOKUGO.push(
     learn: [
       {
         h: "所有形容詞は冠詞とセット",
-        body: "「私の」は mio / mia / miei / mie、「君の」は tuo / tua / tuoi / tue、「彼・彼女の」は suo / sua / suoi / sue。<b>持ち主ではなく、持たれる物の性数</b>に合わせ、ふつう定冠詞をつけます：il mio libro、la mia casa。<br>ただし<b>単数の家族</b>には冠詞をつけません：mia madre。",
+        body: "「私の」は mio / mia / miei / mie、「君の」は tuo / tua / tuoi / tue、「彼・彼女の」は suo / sua / suoi / sue。<b>持ち主ではなく、持たれる物の性数</b>に合わせ、ふつう定冠詞をつけます：il mio libro、la mia casa。<br>ただし mio, tuo, suo などで<b>単数の家族</b>を言うときは冠詞をつけません：mia madre。loro は必ずつけ（la loro madre）、mamma や fratellino のような愛称にもつけます。",
         ex: [
           ["La mia casa è piccola.", "私の家は小さいです。"],
           ["Mio padre è gentile.", "父は親切です。"],
@@ -481,7 +481,7 @@ window.KOKUGO.push(
         q: "___ madre è italiana.（私の母）",
         o: ["Mia", "La mia", "Mio"],
         a: 0,
-        why: "単数の家族には冠詞をつけません。",
+        why: "mia ＋mia ＋単数の家族には冠詞をつけません。",
       },
       {
         q: "___ amici sono qui.（私の友達）",

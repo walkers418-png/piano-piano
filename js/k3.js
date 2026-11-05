@@ -142,23 +142,11 @@ window.KOKUGO.push(
           "Era nella bottega di un vecchio falegname.",
           "年老いた大工の仕事場にありました。",
         ],
-        [
-          "Un giorno il falegname prende il legno e lo regala a un amico, Geppetto.",
-          "ある日、大工はその木を、友人のジェッペットにあげます。",
-        ],
-        [
-          "Geppetto è povero e abita in una piccola stanza.",
-          "ジェッペットは貧しく、小さな部屋に住んでいます。",
-        ],
+        ["Un giorno il falegname comincia a lavorare il legno e sente una voce sottile.", "ある日、大工がその木を削り始めると、か細い声が聞こえます。"],
+        ["Chi parla? Nella bottega non c'è nessuno!", "誰が話しているのでしょう？仕事場には誰もいません！"],
+        ["Il falegname ha paura e regala il legno a un amico, Geppetto.", "大工は怖くなり、その木を友人のジェッペットにあげます。"],
+        ["Geppetto è povero e abita in una piccola stanza.", "ジェッペットは貧しく、小さな部屋に住んでいます。"],
         ["Vuole fare un burattino.", "あやつり人形を作りたいのです。"],
-        [
-          "Quando comincia a lavorare, sente una voce sottile.",
-          "仕事を始めると、か細い声が聞こえます。",
-        ],
-        [
-          "Chi parla? Nella stanza non c'è nessuno!",
-          "誰が話しているのでしょう？部屋には誰もいません！",
-        ],
       ],
       gloss: [
         ["c'era una volta", "昔々〜がありました（物語の決まり文句）"],
@@ -176,21 +164,21 @@ window.KOKUGO.push(
           s: "木ぎれを最後に受け取ったのは誰？",
           o: ["ジェッペット", "年老いた大工", "ピノッキオ"],
           a: 0,
-          why: "lo regala a un amico, Geppetto.",
+          why: "regala il legno a un amico, Geppetto.",
         },
         {
           skill: "ref",
-          s: "lo regala の lo が指すものは？",
-          o: ["木ぎれ", "大工", "部屋"],
+          s: "Vuole fare un burattino. で、作りたいと思っているのは誰？",
+          o: ["ジェッペット", "大工", "木ぎれ"],
           a: 0,
-          why: "直前の il legno を受けています。",
+          why: "主語が省略されています。直前の文の Geppetto が主語です。",
         },
         {
           skill: "infer",
           s: "「か細い声」の正体として、物語から予想できるのは？",
           o: ["木ぎれそのもの", "部屋の隣の人", "大工"],
           a: 0,
-          why: "部屋には誰もいないのに声がする、という不思議さが続きを読ませます。",
+          why: "仕事場には誰もいないのに声がする、という不思議さが続きを読ませます。",
         },
         {
           skill: "vocab",
@@ -480,7 +468,7 @@ window.KOKUGO.push(
         body: "<b>avere または essere の現在形 ＋ 過去分詞</b> で作ります。規則形の過去分詞は -are → <b>-ato</b>、-ere → <b>-uto</b>、-ire → <b>-ito</b>。",
         ex: [
           ["Ho mangiato la pizza.", "ピザを食べました。"],
-          ["Ho ricevuto una email.", "メールを受け取りました。"],
+          ["Ho ricevuto un'email.", "メールを受け取りました。"],
           ["Ho dormito bene.", "よく眠りました。"],
         ],
       },
@@ -568,8 +556,8 @@ window.KOKUGO.push(
           "憲兵がピノッキオの鼻をつかまえました。",
         ],
         [
-          "Geppetto è tornato a casa con il burattino.",
-          "ジェッペットは人形を連れて家に帰りました。",
+          "Il carabiniere ha portato Geppetto in prigione, ma poi Geppetto è tornato a casa.",
+          "憲兵はジェッペットを牢屋へ連れて行きましたが、やがてジェッペットは家に帰りました。",
         ],
         [
           "Per comprare un libro di scuola, ha venduto la sua giacca.",
@@ -734,7 +722,7 @@ window.KOKUGO.push(
       },
       {
         h: "比べ方の入口 più と meno",
-        body: "<b>più</b>（より多く）と <b>meno</b>（より少なく）を形容詞の前に置きます。「〜より」は <b>di</b> です。",
+        body: "<b>più</b>（より多く）と <b>meno</b>（より少なく）を形容詞の前に置きます。「〜より」は <b>di</b> です（2つの形容詞や動詞を比べるときは che）。",
         ex: [
           ["Il treno è più veloce dell'autobus.", "電車はバスより速いです。"],
           ["Questa camera è meno cara.", "この部屋はより安いです。"],
@@ -743,7 +731,7 @@ window.KOKUGO.push(
     ],
     gram: [
       {
-        q: "___ pagare con la carta?（払えますか）",
+        q: "___ pagare con la carta?（私がカードで払ってもいいですか）",
         o: ["Posso", "Puoi", "Vuole"],
         a: 0,
         why: "自分がしてよいか尋ねるのは Posso。",

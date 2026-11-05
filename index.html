@@ -262,6 +262,32 @@ svg.i{width:1em;height:1em;fill:currentColor;flex:none}
 .pair .pl b{flex:1;min-width:0;font-size:18px;font-weight:800;line-height:1.4;overflow-wrap:anywhere}
 .pair .cap{margin-top:6px}
 
+
+/* ---- today / kokugo ---- */
+.task{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:16px;padding:12px 14px}
+.task:active{transform:translateY(2px);border-bottom-width:2px}
+.task .tic{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:var(--blue-s);color:var(--blue)}
+.task .tic.ok{background:var(--gold-s);color:var(--gold-e)}
+.task .a{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.4}
+.task b{font-size:17px;font-weight:800}
+.task small{font-size:13px;color:var(--muted);font-weight:600}
+.task .min{flex:none;font-size:13px;font-weight:800;color:var(--muted)}
+.dots{display:flex;gap:4px;margin-top:6px}
+.dots i{width:18px;height:6px;border-radius:3px;background:var(--lock)}
+.dots i.on{background:var(--gold)}
+.line{display:flex;align-items:center;gap:10px;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:10px 12px}
+.line .lt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;text-align:left;background:none;border:0;padding:0}
+.line b{font-size:18px;font-weight:800;line-height:1.45;overflow-wrap:anywhere}
+.line .ja{font-size:14px;color:var(--ink);line-height:1.5;font-weight:600}
+.line small{font-size:12.5px;color:var(--muted);font-weight:600}
+.line .who{font-weight:800;color:var(--blue)}
+.line .hid{color:var(--muted);font-size:15px;font-weight:700}
+.rec{display:flex;gap:8px;flex-wrap:wrap;margin:-4px 0 4px}
+.kb{font-size:15px;line-height:1.75;font-weight:600}
+.gloss{display:grid;gap:4px;font-size:14px}
+.hints{margin:8px 0 0;padding-left:20px;font-size:14px;color:var(--muted)}
+textarea.field{resize:vertical;font-size:17px;line-height:1.5}
+
 /* ---- settings ---- */
 .set{display:flex;flex-direction:column;gap:8px}
 .set label{font-weight:800}
@@ -285,13 +311,20 @@ select{font:inherit;font-weight:700;padding:10px 12px;border-radius:12px;border:
 <body>
 <div id="app"></div>
 <nav id="tabs" aria-label="メニュー"><div class="in">
-  <button data-act="tab" data-v="path"><svg class="i" viewBox="0 0 24 24"><path d="M12 3 2 10v1h2v9h6v-6h4v6h6v-9h2v-1z"/></svg>学ぶ</button>
-  <button data-act="tab" data-v="verbs"><svg class="i" viewBox="0 0 24 24"><path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4zm4 3v2h8V7zm0 4v2h8v-2z"/></svg>動詞</button>
+  <button data-act="tab" data-v="today"><svg class="i" viewBox="0 0 24 24"><path d="M12 3 2 10v1h2v9h6v-6h4v6h6v-9h2v-1z"/></svg>今日</button>
+  <button data-act="tab" data-v="kok"><svg class="i" viewBox="0 0 24 24"><path d="M12 5C9.5 3.5 6 3 3 3v16c3 0 6.500.5 9 2 2.500-1.500 6-2 9-2V3c-3 0-6.500.5-9 2zm-1 13.200C9 17.400 7 17 5 16.900V5.100c2 .1 4.200.6 6 1.600zm8-1.300c-2 .1-4 .5-6 1.300V6.700c1.800-1 4-1.500 6-1.600z"/></svg>国語</button>
+  <button data-act="tab" data-v="path"><svg class="i" viewBox="0 0 24 24"><path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4zm4 3v2h8V7zm0 4v2h8v-2z"/></svg>動詞</button>
   <button data-act="tab" data-v="phr"><svg class="i" viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-8l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>表現</button>
-  <button data-act="tab" data-v="practice"><svg class="i" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 4 2 4.5 4.9.5-3.7 3.3 1.1 4.8L12 16.6 7.7 19.1l1.1-4.8L5.1 11l4.9-.5z"/></svg>練習</button>
-  <button data-act="tab" data-v="me"><svg class="i" viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.4 0-8 2.2-8 5v3h16v-3c0-2.8-3.6-5-8-5z"/></svg>記録</button>
+  <button data-act="tab" data-v="me"><svg class="i" viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.400 0-8 2.200-8 5v3h16v-3c0-2.800-3.600-5-8-5z"/></svg>記録</button>
 </div></nav>
 
+<script>window.KOKUGO=[];</script>
+<script src="js/k1.js?v=20261105231448"></script>
+<script src="js/k2.js?v=20261105231448"></script>
+<script src="js/k3.js?v=20261105231448"></script>
+<script src="js/k4.js?v=20261105231448"></script>
+<script src="js/k5.js?v=20261105231448"></script>
+<script src="js/k6.js?v=20261105231448"></script>
 <script>
 (function(){
 'use strict';
@@ -439,13 +472,14 @@ function lumi(cls){return `<svg class="lumi ${cls||''}" viewBox="0 0 150 120" ar
 
 /* ================= 保存（このブラウザのみ） ================= */
 const KEY='piano-piano-v2';
-function defaults(){return {ph:{},verbs:{},done:{},days:{},xp:{},xpTotal:0,goal:20,unlockAll:false,settings:{rate:0.85,voice:''}};}
+function defaults(){return {schema:2,plan:5,k:{},kw:{},kwrite:{},ktest:{},ph:{},verbs:{},done:{},days:{},xp:{},xpTotal:0,goal:20,unlockAll:false,settings:{rate:0.85,voice:''}};}
 let S=(function(){
   const d=defaults();
   try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);return Object.assign(d,p,{settings:Object.assign(d.settings,p.settings||{})});}}catch(e){}
   return d;
 })();
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+let saveFailed=false;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));saveFailed=false;}catch(e){saveFailed=true;}}
 function dayNum(){const d=new Date();return Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/86400000);}
 function streak(){let d=dayNum(),n=0;if(!S.days[d])d--;while(S.days[d]){n++;d--;}return n;}
 const xpToday=()=>S.xp[dayNum()]||0;
@@ -475,15 +509,17 @@ const audioNotice=()=>{let ok=true;try{ok='speechSynthesis' in window;}catch(e){
    :(voices.length===0?'<div class="notice">イタリア語の音声が見つかりません。端末の設定でイタリア語の音声を追加してください。</div>':'');};
 
 /* ================= 画面 ================= */
-let view='path', vsel=null, guideSec=0, vfilter='all', vquery='', confirmReset=false, sess=null;
-const TABS=['path','verbs','phr','practice','me'];
+let view='today', vtense='pres', vsel=null, guideSec=0, vfilter='all', vquery='', confirmReset=false, sess=null;
+const TABS=['today','kok','path','verbs','phr','practice','me'];
+const TAB_OF={verbs:'path',practice:'today'};
 const cur=()=>sess.ex[sess.i];
 function go(v){view=v;confirmReset=false;render();window.scrollTo(0,0);}
 function render(){
-  const fn={path:vPath,verbs:vVerbs,verb:vVerb,phr:vPhr,pq:vPq,pqdone:vPqDone,practice:vPractice,me:vMe,guide:vGuide,intro:vIntro,ex:vEx,done:vDone,fail:vFail}[view];
-  $('#app').innerHTML=fn();
+  const fn={today:vToday,kok:vKok,kmap:vKmap,unit:vUnit,kstep:vKstep,kq:vKq,kqdone:vKqDone,path:vPath,verbs:vVerbs,verb:vVerb,phr:vPhr,pq:vPq,pqdone:vPqDone,practice:vPractice,me:vMe,guide:vGuide,intro:vIntro,ex:vEx,done:vDone,fail:vFail}[view];
+  $('#app').innerHTML=(saveFailed?'<div class="notice" style="margin-top:10px">記録を保存できませんでした。プライベートモードや、端末の空き容量を確認してください。</div>':'')+fn();
   $('#tabs').hidden=!TABS.includes(view);
-  document.querySelectorAll('#tabs button').forEach(b=>{if(b.dataset.v===view)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+  const curTab=TAB_OF[view]||view;
+  document.querySelectorAll('#tabs button').forEach(b=>{if(b.dataset.v===curTab)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
   after();
 }
 function after(){
@@ -501,7 +537,7 @@ function after(){
 function firstOpen(){const i=LESSONS.findIndex((_,k)=>!S.done[k]);return i<0?LESSONS.length:i;}
 function vPath(){
   const open=firstOpen(),dx=[0,36,56,36,0,-36,-56,-36];
-  let html=`<div class="hud"><span class="pill fire">${I.fire}<span>${streak()}</span></span>
+  let html=`<div class="seg" style="padding-top:10px"><button class="chip ${view==='path'?'on':''}" data-act="tab" data-v="path">レッスン</button><button class="chip ${view==='verbs'?'on':''}" data-act="tab" data-v="verbs">一覧</button><button class="chip" data-act="tab" data-v="practice">練習</button></div><div class="hud"><span class="pill fire">${I.fire}<span>${streak()}</span></span>
     <div class="goal"><div class="t"><span>今日のXP</span><span>${xpToday()} / ${S.goal}</span></div><div class="meter"><i style="width:${Math.min(100,Math.round(xpToday()/S.goal*100))}%"></i></div></div>
     <span class="pill gem">${I.book}<span>${learned().length}</span></span></div>`;
   html+=audioNotice();
@@ -549,19 +585,19 @@ function verbList(){
 }
 function vVerbs(){
   const fl=[['all','すべて'],['irr','不規則'],['are','-are'],['ere','-ere'],['ire','-ire'],['isc','-isc'],['refl','再帰']];
-  return `<div class="title"><h2>動詞 ${ALL.length}語</h2></div>
+  return `<div class="seg" style="padding-top:10px"><button class="chip ${view==='path'?'on':''}" data-act="tab" data-v="path">レッスン</button><button class="chip ${view==='verbs'?'on':''}" data-act="tab" data-v="verbs">一覧</button><button class="chip" data-act="tab" data-v="practice">練習</button></div><div class="title"><h2>動詞 ${ALL.length}語</h2></div>
   <input id="q" class="search" type="search" placeholder="検索（例：parlare、食べる）" value="${esc(vquery)}" aria-label="動詞を検索">
   <div class="chips">${fl.map(f=>`<button class="chip ${vfilter===f[0]?'on':''}" data-act="filter" data-v="${f[0]}">${f[1]}</button>`).join('')}</div>
   <div class="stack" id="vlist">${verbList()}</div>`;
 }
-function vcard(inf){
-  const v=VB[inf];
+function vcard(inf,t){
+  const v=VB[inf],F=tenseForms(inf,t||'pres');
   return `<div class="vcard"><div class="vhead"><div class="a"><b>${inf}</b><small>${v.ja}・${TYPE_LABEL[v.type]}</small></div><button class="spk" data-act="say" data-v="${inf}" aria-label="${inf} を再生">${I.spk}</button></div>
-  <div class="forms">${PRON.map((p,i)=>`<button class="form" data-act="say" data-v="${esc(formShown(v,i))}"><small>${p[0]}</small><b>${esc(formShown(v,i))}</b></button>`).join('')}</div>
+  <div class="forms">${PRON.map((p,i)=>`<button class="form" data-act="say" data-v="${esc(F[i])}"><small>${p[0]}</small><b>${esc(F[i])}</b></button>`).join('')}</div>
   <div class="exline"><div class="a"><b>${esc(v.ex)}</b><small>${esc(v.exJa)}</small></div><button class="spk" data-act="say" data-v="${esc(v.ex)}" aria-label="例文を再生">${I.spk}</button></div></div>`;
 }
 function vVerb(){
-  return `<div class="ltop"><button class="x" data-act="tab" data-v="verbs" aria-label="戻る">${I.back}</button><h2 style="flex:1">${vsel}</h2></div><div class="lbody" style="padding-bottom:40px">${vcard(vsel)}</div>`;
+  return `<div class="ltop"><button class="x" data-act="tab" data-v="verbs" aria-label="戻る">${I.back}</button><h2 style="flex:1">${vsel}</h2></div><div class="lbody" style="padding-bottom:40px"><div class="chips" style="margin-top:0">${TENSES.map(t=>`<button class="chip ${vtense===t[0]?'on':''}" data-act="tense" data-v="${t[0]}">${t[1]}</button>`).join('')}</div><p class="cap" style="margin-bottom:10px">${TENSE_NOTE[vtense]}${vtense==='pp'&&usesEssere(vsel)?'　助動詞は essere。女性なら語尾が -a（複数は -e）になります。':''}</p>${vcard(vsel,vtense)}</div>`;
 }
 
 /* ---------- 練習・記録 ---------- */
@@ -581,6 +617,8 @@ function vMe(){
    <div class="stat"><b style="color:var(--gold-e)">${I.bolt}${S.xpTotal}</b><small>合計XP</small></div>
    <div class="stat"><b>${L.length}<small>/ ${ALL.length}</small></b><small>学んだ動詞</small></div>
    <div class="stat"><b>${mastered}</b><small>定着した動詞</small></div>
+   <div class="stat"><b>${KU.filter(unitDone).length}<small>/ ${KU.length}</small></b><small>国語の単元</small></div>
+   <div class="stat"><b>${Object.keys(S.kw).length}</b><small>覚えた単語</small></div>
   </div>
   <h3 class="sectitle">1日の目標</h3>
   <div class="seg">${[10,20,30,50].map(g=>`<button class="chip ${S.goal===g?'on':''}" data-act="goal" data-v="${g}">${g} XP</button>`).join('')}</div>
@@ -589,6 +627,7 @@ function vMe(){
    <div class="card set"><label for="rate">読み上げの速さ：<span id="rateLbl">${st.rate.toFixed(2)}</span></label><input id="rate" type="range" min="0.5" max="1.1" step="0.05" value="${st.rate}"></div>
    ${voices.length?`<div class="card set"><label for="voice">音声</label><select id="voice">${voices.map(v=>`<option value="${esc(v.name)}" ${(st.voice||voices[0].name)===v.name?'selected':''}>${esc(v.name)}</option>`).join('')}</select></div>`:''}
    <button class="btn full" data-act="say" data-v="Buongiorno, come stai?">音声をテスト</button></div>
+  ${moveCard()}
   <h3 class="sectitle">その他</h3>
   <div class="stack"><div class="card"><label class="check"><input id="unlock" type="checkbox" ${S.unlockAll?'checked':''}>すべてのレッスンを開放する</label></div>
    <div class="card"><p class="cap" style="margin-bottom:12px">学習記録はこのブラウザにだけ保存されています。</p>
@@ -763,7 +802,7 @@ function abar(e){
   }
   const ok=e.state==='right';
   const title=ok?pick(['正解です！','いいですね！','その調子！','Bravo!']):(sess.hearts<=0&&sess.mode==='lesson'?'ライフがなくなりました':'正解は…');
-  const ans=ok?(e.type==='speak'?'この調子で、少しずつ。':e.type==='match'?'すべて組み合わせました。':''):answerText(e);
+  const ans=ok?(e.accWarn?`アクセントに注意：${VB[e.v].ex}`:e.type==='speak'?'この調子で、少しずつ。':e.type==='match'?'すべて組み合わせました。':''):answerText(e);
   const play=e.v&&e.type!=='match'?`<button class="spk" data-act="say" data-v="${esc(e.type==='conj'||e.type==='meaning'?(e.dir===1||e.type==='conj'?e.correct:e.v):VB[e.v].ex)}" aria-label="再生">${I.spk}</button>`:'';
   return `<div class="abar ${e.state}"><div class="in"><div class="fb"><span class="ic">${ok?I.check:I.cross}</span><div class="tx"><b>${title}</b>${ans?`<div>${esc(ans)}</div>`:''}</div>${play}</div>
     <button class="btn full ${ok?'green':'red'}" data-act="cont">続ける</button></div></div>`;
@@ -787,7 +826,7 @@ function check(){
   const v=e.v?VB[e.v]:null;
   if(e.type==='meaning'||e.type==='fill'||e.type==='conj'){if(e.sel==null)return;resolve(e,e.opts[e.sel]===e.correct);}
   else if(e.type==='build'||e.type==='listenBuild'){if(!e.built.length)return;resolve(e,norm(e.built.map(i=>e.tiles[i]).join(' '))===norm(v.ex));}
-  else if(e.type==='type'){const a=$('#ans');e.val=a?a.value:e.val;if(!e.val.trim())return;resolve(e,norm(e.val)===norm(v.ex));}
+  else if(e.type==='type'){const a=$('#ans');e.val=a?a.value:e.val;if(!e.val.trim())return;const good=norm(e.val)===norm(v.ex);e.accWarn=good&&strictNorm(e.val)!==strictNorm(v.ex);resolve(e,good);}
   else if(e.type==='speak')resolve(e,true);
 }
 function cont(){
@@ -2422,6 +2461,1153 @@ document.addEventListener("input", (e) => {
     if (l) l.innerHTML = phList();
   }
 });
+/* ================= 動詞の時制 ================= */
+// 過去分詞の不規則形。ここにない動詞は語尾の規則で作る（-are→-ato, -ere→-uto, -ire→-ito）
+const PP_IRR = {
+  essere: "stato",
+  fare: "fatto",
+  stare: "stato",
+  dire: "detto",
+  bere: "bevuto",
+  vedere: "visto",
+  prendere: "preso",
+  mettere: "messo",
+  leggere: "letto",
+  scrivere: "scritto",
+  vivere: "vissuto",
+  correre: "corso",
+  chiedere: "chiesto",
+  rispondere: "risposto",
+  decidere: "deciso",
+  perdere: "perso",
+  spendere: "speso",
+  chiudere: "chiuso",
+  scendere: "sceso",
+  scegliere: "scelto",
+  rimanere: "rimasto",
+  aprire: "aperto",
+  offrire: "offerto",
+  venire: "venuto",
+  conoscere: "conosciuto",
+};
+// 近過去の助動詞が essere になる動詞（再帰動詞はすべて essere）
+const AUX_E = [
+  "essere",
+  "andare",
+  "stare",
+  "venire",
+  "uscire",
+  "arrivare",
+  "tornare",
+  "entrare",
+  "partire",
+  "rimanere",
+  "salire",
+  "scendere",
+];
+const FUT_IRR = {
+  essere: "sar",
+  avere: "avr",
+  andare: "andr",
+  potere: "potr",
+  dovere: "dovr",
+  sapere: "sapr",
+  vedere: "vedr",
+  vivere: "vivr",
+  venire: "verr",
+  volere: "vorr",
+  bere: "berr",
+  rimanere: "rimarr",
+  tenere: "terr",
+  fare: "far",
+  dare: "dar",
+  stare: "star",
+  dire: "dir",
+};
+const IMP_STEM = { fare: "face", dire: "dice", bere: "beve" };
+const TENSES = [
+  ["pres", "現在"],
+  ["pp", "近過去"],
+  ["imp", "半過去"],
+  ["fut", "未来"],
+  ["cond", "条件法"],
+];
+const TENSE_NOTE = {
+  pres: "「〜する」「〜している」。",
+  pp: "「〜した」。終わった出来事。",
+  imp: "「〜していた」「よく〜したものだ」。過去の背景や習慣。",
+  fut: "「〜するだろう」「〜するつもり」。",
+  cond: "「〜したいのですが」「〜だろうに」。丁寧な依頼にも使う。",
+};
+const baseInf = (inf) =>
+  inf.endsWith("rsi") ? inf.replace(/rsi$/, "re") : inf;
+function participle(b) {
+  return (
+    PP_IRR[b] ||
+    (b.endsWith("are")
+      ? b.slice(0, -3) + "ato"
+      : b.endsWith("ere")
+        ? b.slice(0, -3) + "uto"
+        : b.slice(0, -3) + "ito")
+  );
+}
+const usesEssere = (inf) => inf.endsWith("rsi") || AUX_E.includes(baseInf(inf));
+function futStem(b) {
+  if (FUT_IRR[b]) return FUT_IRR[b];
+  if (b.endsWith("are")) {
+    const x = b.slice(0, -3);
+    if (/[cg]i$/.test(x)) return x.slice(0, -1) + "er"; // mangiare→manger-, cominciare→comincer-
+    if (/[cg]$/.test(x)) return x + "her"; // cercare→cercher-, pagare→pagher-
+    return x + "er";
+  }
+  return b.slice(0, -1);
+}
+function tenseForms(inf, t) {
+  const v = VB[inf],
+    b = baseInf(inf),
+    pre = (i) => (v.refl ? CLITIC[i] + " " : "");
+  if (t === "pres") return v.f.map((_, i) => formShown(v, i));
+  if (t === "pp") {
+    const es = usesEssere(inf),
+      A = IRR[es ? "essere" : "avere"],
+      p = participle(b);
+    return A.map(
+      (a, i) => pre(i) + a + " " + (es && i >= 3 ? p.slice(0, -1) + "i" : p),
+    );
+  }
+  if (t === "imp") {
+    if (b === "essere")
+      return ["ero", "eri", "era", "eravamo", "eravate", "erano"];
+    const st = IMP_STEM[b] || b.slice(0, -2);
+    return ["vo", "vi", "va", "vamo", "vate", "vano"].map(
+      (e, i) => pre(i) + st + e,
+    );
+  }
+  const st = futStem(b),
+    E =
+      t === "fut"
+        ? ["ò", "ai", "à", "emo", "ete", "anno"]
+        : ["ei", "esti", "ebbe", "emmo", "este", "ebbero"];
+  return E.map((e, i) => pre(i) + st + e);
+}
+
+/* ================= 国語コース ================= */
+const KU = (window.KOKUGO || []).slice().sort((a, b) => a.g - b.g);
+const KBY = {};
+KU.forEach((u) => (KBY[u.id] = u));
+const KSTAGES = [
+  [1, "A1", "発音と、文の土台"],
+  [2, "A1", "言いたいことを増やす"],
+  [3, "A1〜A2", "過去を話す"],
+  [4, "A2", "語りの基礎"],
+  [5, "A2〜B1", "未来と丁寧さ"],
+  [6, "B1の入口", "長めの文章に慣れる"],
+];
+const KSTEPS = [
+  ["talk", "話す"],
+  ["words", "語彙"],
+  ["gram", "文法"],
+  ["read", "読解"],
+  ["write", "書く"],
+];
+const SKILL = {
+  match: "内容の理解",
+  order: "順序",
+  ref: "指示語",
+  main: "要旨",
+  infer: "推論",
+  fact: "事実と意見",
+  info: "情報の読み取り",
+  vocab: "語句",
+};
+const REVIEW_CAP = 20; // 1回の単語復習の上限。休んだ後に溜まっても、これ以上は出さない
+// 単語は最初に出た単元のものを正とし、重複しても1語として扱う
+const WM = {};
+KU.forEach((u) =>
+  (u.words || []).forEach((w) => {
+    if (!WM[w[0]]) WM[w[0]] = { it: w[0], ja: w[1], note: w[2] || "", u: u.id };
+  }),
+);
+let kq = null,
+  kst = null,
+  kuid = null,
+  recS = { line: null, rec: null, url: null, err: "" },
+  moveOut = "",
+  moveMsg = "",
+  moveErr = false;
+
+const kdone = (id, st) => !!(S.k[id] && S.k[id][st]);
+const unitDone = (u) =>
+  kdone(u.id, "talk") &&
+  KSTEPS.some((s) => s[0] !== "talk" && kdone(u.id, s[0]));
+function markStep(id, st) {
+  (S.k[id] || (S.k[id] = {}))[st] = dayNum();
+}
+function addXp(n) {
+  const d = dayNum();
+  S.days[d] = 1;
+  S.xp[d] = (S.xp[d] || 0) + n;
+  S.xpTotal += n;
+}
+function nextStep() {
+  for (const u of KU) {
+    if (unitDone(u)) continue;
+    for (const s of KSTEPS)
+      if (!kdone(u.id, s[0]) && s[0] !== "write")
+        return { u, st: s[0], label: s[1] };
+  }
+  return null;
+}
+function gradeWord(it, ok) {
+  const r = S.kw[it] || (S.kw[it] = { box: 0, due: 0, ok: 0, ng: 0 });
+  if (ok) {
+    r.ok++;
+    r.box = Math.min(r.box + 1, 6);
+  } else {
+    r.ng++;
+    r.box = 0;
+  }
+  r.due = dayNum() + INTERVALS[r.box];
+}
+const dueWords = () =>
+  Object.keys(S.kw)
+    .filter((w) => WM[w] && S.kw[w].due <= dayNum())
+    .sort((a, b) => S.kw[a].due - S.kw[b].due || S.kw[a].box - S.kw[b].box);
+const dueVerbs = () => learned().filter((v) => S.verbs[v].due <= dayNum());
+
+/* ---------- 今日 ---------- */
+function planTasks(mins) {
+  const out = [];
+  let left = mins;
+  const add = (t, cost) => {
+    if (left > 0 || !out.length) {
+      out.push(t);
+      left -= cost;
+    }
+  };
+  const dw = dueWords().length,
+    dv = dueVerbs().length;
+  if (dw)
+    add(
+      {
+        act: "krev",
+        ic: I.book,
+        t: "単語の復習",
+        s: `今日の復習 ${Math.min(dw, REVIEW_CAP)}語`,
+        m: 3,
+      },
+      3,
+    );
+  if (dv)
+    add(
+      {
+        act: "practice",
+        ic: I.star,
+        t: "動詞の復習",
+        s: `復習の時期 ${dv}語から10問`,
+        m: 4,
+      },
+      4,
+    );
+  let seen = {};
+  // 国語の次のステップ→動詞の次のレッスン→表現、の順に時間まで詰める
+  const steps = [];
+  for (const u of KU) {
+    if (steps.length >= 6) break;
+    if (unitDone(u)) continue;
+    for (const s of KSTEPS) {
+      if (s[0] === "write") continue;
+      if (!kdone(u.id, s[0])) steps.push({ u, s });
+    }
+  }
+  const open = firstOpen();
+  let si = 0,
+    addedLesson = false;
+  while (left > 0 && (si < steps.length || !addedLesson)) {
+    if (si < steps.length) {
+      const x = steps[si++];
+      if (!seen[x.u.id + x.s[0]]) {
+        seen[x.u.id + x.s[0]] = 1;
+        add(
+          {
+            act: "kstep",
+            v: x.u.id + "|" + x.s[0],
+            ic: I.bolt,
+            t: `国語：${x.s[1]}`,
+            s: `段階${x.u.g}・${x.u.title}`,
+            m: 4,
+          },
+          4,
+        );
+      }
+    }
+    if (left > 0 && !addedLesson && open < LESSONS.length) {
+      addedLesson = true;
+      add(
+        {
+          act: "lesson",
+          v: String(open),
+          ic: I.fire,
+          t: "動詞のレッスン",
+          s: LESSONS[open].verbs.join("・"),
+          m: 5,
+        },
+        5,
+      );
+    } else if (si >= steps.length) addedLesson = true;
+  }
+  if (left > 0)
+    add(
+      {
+        act: "pqstart",
+        ic: I.spk,
+        t: "表現クイズ",
+        s: "日常表現から10問",
+        m: 3,
+      },
+      3,
+    );
+  return out;
+}
+function vToday() {
+  const m = S.plan || 5,
+    opts = [
+      [5, "5分だけ"],
+      [15, "15分"],
+      [30, "じっくり"],
+    ];
+  const next = nextStep();
+  const hud = `<div class="hud"><span class="pill fire">${I.fire}<span>${streak()}</span></span>
+    <div class="goal"><div class="t"><span>今日のXP</span><span>${xpToday()} / ${S.goal}</span></div><div class="meter"><i style="width:${Math.min(100, Math.round((xpToday() / S.goal) * 100))}%"></i></div></div>
+    <span class="pill gem">${I.book}<span>${Object.keys(S.kw).length + learned().length}</span></span></div>`;
+  return `${hud}${audioNotice()}
+  <div class="title"><h2>今日はどのくらい？</h2></div>
+  <div class="seg">${opts.map((o) => `<button class="chip ${m === o[0] ? "on" : ""}" data-act="plan" data-v="${o[0]}">${o[1]}</button>`).join("")}</div>
+  <h3 class="sectitle">今日のメニュー</h3>
+  <div class="stack">${planTasks(m)
+    .map(
+      (t) =>
+        `<button class="task" data-act="${t.act}" ${t.v != null ? `data-v="${esc(t.v)}"` : ""}><span class="tic">${t.ic}</span><span class="a"><b>${t.t}</b><small>${esc(t.s)}</small></span><span class="min">${t.m}分</span></button>`,
+    )
+    .join("")}</div>
+  ${next ? `<h3 class="sectitle">続きから</h3><button class="btn full blue" data-act="unit" data-v="${next.u.id}">段階${next.u.g}・${esc(next.u.title)}</button>` : ""}
+  <div class="mascot-row">${lumi()}</div><p class="cap" style="text-align:center">休んだ日があっても大丈夫。復習は溜め込まず、少しずつ出します。</p>`;
+}
+
+/* ---------- 国語：一覧 ---------- */
+function vKok() {
+  const done = KU.filter(unitDone).length;
+  return `<div class="title"><h2>国語</h2></div>
+  <p class="cap" style="margin:-4px 0 12px">日本の国語で学ぶ領域（読む・書く・話す・語彙・文法）を、イタリア語で順に体験します。${KU.length ? `完了 ${done} / ${KU.length} 単元` : ""}</p>
+  <button class="btn full" data-act="tab" data-v="kmap">国語の領域との対応を見る</button>
+  ${KSTAGES.map((s) => {
+    const us = KU.filter((u) => u.g === s[0]);
+    if (!us.length) return "";
+    const c = "c" + ((s[0] - 1) % 3),
+      best = S.ktest[s[0]];
+    return `<div class="secban ${c}"><div><small>段階 ${s[0]}・${s[0] >= 4 ? "読んで慣れる" : "基礎"}</small><b>${s[2]}</b><span class="sub">小${s[0]}相当・CEFR目安 ${s[1]}</span></div></div>
+    <div class="stack" style="margin-top:12px">${us.map((u) => `<button class="task" data-act="unit" data-v="${u.id}"><span class="tic ${unitDone(u) ? "ok" : ""}">${unitDone(u) ? I.check : I.star}</span><span class="a"><b>${esc(u.title)}</b><small>${esc(u.goal)}</small><span class="dots">${KSTEPS.map((st) => `<i class="${kdone(u.id, st[0]) ? "on" : ""}" title="${st[1]}"></i>`).join("")}</span></span></button>`).join("")}
+    <button class="btn full" data-act="ktest" data-v="${s[0]}">段階${s[0]}の確認テスト${best != null ? `（最高 ${best}%）` : ""}</button></div>`;
+  }).join("")}`;
+}
+function vKmap() {
+  const rows = [
+    [
+      "文字・発音・音読",
+      "アルファベット、c/g/gli/gn/sc、二重子音、アクセント（段階1）",
+    ],
+    ["語彙", "テーマ別の単語、対義語、語の家族、-ino/-one、接頭辞"],
+    ["文法", "性数、冠詞、形容詞、前置詞、時制、代名詞、比較、関係詞、接続詞"],
+    [
+      "読むこと",
+      "物語、説明文、手紙。内容一致、順序、指示語、要旨、推論、事実と意見",
+    ],
+    ["情報の扱い", "時刻表、メニュー、お知らせ、表を読む"],
+    ["書くこと", "文作り、日記、手紙、メール、要約"],
+    ["話す・聞く", "会話、シャドーイング、録音して聞き比べ、書き取り"],
+    ["敬語に当たるもの", "tu と Lei、丁寧な依頼"],
+    ["言語文化", "ことわざ、童謡、祝日と地理、ピノッキオ"],
+    ["辞書の使い方", "活用形から原形を探す、性の記号を読む"],
+  ];
+  return `<div class="ltop"><button class="x" data-act="tab" data-v="kok" aria-label="戻る">${I.back}</button><h2 style="flex:1">国語との対応</h2></div>
+  <div class="lbody" style="padding-bottom:40px"><div class="stack">
+  <div class="tip">子どもの国語をそのまま写したものではありません。母語話者は話せる状態で読み書きを学びますが、ここでは話すことから始め、題材も大人向けにしています。対応は作成者の見立てで、公的な基準ではありません。</div>
+  <div class="card scroll-x"><table class="etable"><thead><tr><th>国語の領域</th><th>このコース</th></tr></thead><tbody>${rows.map((r) => `<tr><td style="white-space:nowrap"><b>${r[0]}</b></td><td>${r[1]}</td></tr>`).join("")}</tbody></table></div>
+  <div class="card"><p style="margin-bottom:6px"><b>どこまで身につくか</b></p><p class="cap">全24単元は8〜10時間ほどの分量です。「小6相当」は学ぶ領域の話で、その力が身につくという保証ではありません。段階4〜6は「読んで慣れる」ことを目的にしています。CEFRの実力には数百時間の学習と数千語が必要です。中学相当の内容は、次の計画です。</p></div>
+  <div class="card"><p class="cap">教材のイタリア語はAIが作成し、機械検査とAIの校正を通しています。イタリア語話者の確認は受けていません。誤りが残っている可能性があります。</p></div>
+  </div></div>`;
+}
+
+/* ---------- 国語：単元 ---------- */
+function vUnit() {
+  const u = KBY[kuid];
+  return `<div class="ltop"><button class="x" data-act="tab" data-v="kok" aria-label="戻る">${I.back}</button><h2 style="flex:1;font-size:20px">${esc(u.title)}</h2></div>
+  <div class="lbody" style="padding-bottom:40px">
+  <p class="cap" style="margin-bottom:14px">段階${u.g}・${esc(u.goal)}</p>
+  <div class="stack">${KSTEPS.map((s) => {
+    const d = kdone(u.id, s[0]);
+    return `<button class="task" data-act="kstep" data-v="${u.id}|${s[0]}"><span class="tic ${d ? "ok" : ""}">${d ? I.check : I.star}</span><span class="a"><b>${s[1]}${s[0] === "write" ? "（任意）" : ""}</b><small>${STEP_NOTE[s[0]]}</small></span></button>`;
+  }).join("")}</div>
+  <p class="cap" style="margin-top:14px">好きな順に進められます。「話す」と他の1つで、この単元は完了です。</p></div>`;
+}
+const STEP_NOTE = {
+  talk: "会話を聞いて、まねて言う",
+  words: "単語を覚えて確かめる",
+  gram: "きまりを読んで、問題を解く",
+  read: "文章を読んで、問いに答える",
+  write: "短い文を書いて、見本と比べる",
+};
+function openStep(id, st) {
+  kuid = id;
+  kst = { u: KBY[id], st, show: {}, hide: false, model: false, prompt: "" };
+  recS = { line: null, rec: null, url: null, err: "" };
+  go("kstep");
+}
+function ktop(title) {
+  return `<div class="ltop"><button class="x" data-act="unit" data-v="${kst.u.id}" aria-label="戻る">${I.back}</button><h2 style="flex:1;font-size:20px">${title}</h2></div>`;
+}
+function vKstep() {
+  const { u, st } = kst;
+  if (st === "talk") return vTalk(u);
+  if (st === "words") return vWords(u);
+  if (st === "gram") return vGram(u);
+  if (st === "read") return vRead(u);
+  return vWrite(u);
+}
+function lineRow(i, it, ja, who) {
+  const shown = kst.show[i],
+    hide = kst.hide && !shown;
+  return `<div class="line"><button class="lt" data-act="kline" data-v="${i}">${who ? `<small class="who">${esc(who)}</small>` : ""}<b>${hide ? `<span class="hid">文 ${i + 1}（タップで表示）</span>` : esc(it)}</b>${shown ? `<span class="ja">${esc(ja)}</span>` : ""}</button><button class="spk" data-act="say" data-v="${esc(it)}" aria-label="再生">${I.spk}</button></div>`;
+}
+function vTalk(u) {
+  const canRec = recSupported(),
+    L = u.talk;
+  return `${ktop("話す")}<div class="lbody" style="padding-bottom:150px">
+  <div class="tip">① 全文を聞く ② 文をタップして意味を確かめる ③ 声に出してまねる。文字を隠して聞くと、耳がきたえられます。</div>
+  <div class="seg" style="margin:14px 0"><button class="btn sm blue" data-act="ksayall">全部聞く</button><button class="btn sm" data-act="khide">${kst.hide ? "文字を出す" : "文字を隠す"}</button></div>
+  <div class="stack">${L.map((l, i) => lineRow(i, l[1], l[2], l[0]) + (canRec ? recRow(i, l[1]) : "")).join("")}</div>
+  ${recS.err ? `<div class="notice" style="margin-top:12px">${esc(recS.err)}</div>` : ""}
+  ${canRec ? '<p class="cap" style="margin-top:12px">録音はこの端末の中だけで使い、外へは送りません。</p>' : '<p class="cap" style="margin-top:12px">この環境では録音が使えません。声に出して、お手本と比べてください。</p>'}
+  </div><div class="bottom"><div class="in"><button class="btn green full" data-act="kfin">言えました</button></div></div>`;
+}
+function recRow(i, it) {
+  const on = recS.line === i,
+    rec = on && recS.rec;
+  return `<div class="rec"><button class="btn sm ${rec ? "red" : ""}" data-act="krec" data-v="${i}">${rec ? "止める" : "録音"}</button>${on && recS.url ? `<button class="btn sm" data-act="krecplay">自分の声</button><button class="btn sm" data-act="say" data-v="${esc(it)}">お手本</button>` : ""}</div>`;
+}
+function vWords(u) {
+  return `${ktop("語彙")}<div class="lbody" style="padding-bottom:150px">
+  <div class="stack">${u.words.map((w) => `<div class="line"><div class="lt"><b>${esc(w[0])}</b><span class="ja">${esc(w[1])}</span>${w[2] ? `<small>${esc(w[2])}</small>` : ""}</div><button class="spk" data-act="say" data-v="${esc(w[0])}" aria-label="再生">${I.spk}</button></div>`).join("")}</div>
+  </div><div class="bottom"><div class="in"><button class="btn green full" data-act="kquiz">確かめる</button></div></div>`;
+}
+function vGram(u) {
+  return `${ktop("文法")}<div class="lbody" style="padding-bottom:150px"><div class="stack">
+  ${u.learn
+    .map(
+      (
+        c,
+      ) => `<div class="card"><p style="font-weight:800;margin-bottom:6px">${esc(c.h)}</p><p class="kb">${c.body}</p>
+    ${(c.ex || []).length ? `<div class="stack" style="margin-top:10px">${c.ex.map((e) => `<div class="exline" style="margin-top:0"><div class="a"><b>${esc(e[0])}</b><small>${esc(e[1])}</small></div><button class="spk" data-act="say" data-v="${esc(e[0])}" aria-label="再生">${I.spk}</button></div>`).join("")}</div>` : ""}</div>`,
+    )
+    .join("")}
+  </div></div><div class="bottom"><div class="in"><button class="btn green full" data-act="kquiz">問題を解く</button></div></div>`;
+}
+function vRead(u) {
+  const r = u.read;
+  return `${ktop("読解")}<div class="lbody" style="padding-bottom:150px">
+  <p class="cap">${esc(r.kind)}</p><h2 style="margin-bottom:12px">${esc(r.title)}</h2>
+  <div class="seg" style="margin-bottom:14px"><button class="btn sm blue" data-act="ksayall">全部聞く</button><button class="btn sm" data-act="khide">${kst.hide ? "文字を出す" : "文字を隠す"}</button></div>
+  <div class="stack">${r.lines.map((l, i) => lineRow(i, l[0], l[1])).join("")}</div>
+  <p class="cap" style="margin-top:10px">文をタップすると訳が出ます。まず訳を見ずに読んでみましょう。</p>
+  ${(r.gloss || []).length ? `<h3 class="sectitle">語句</h3><div class="card"><div class="gloss">${r.gloss.map((g) => `<div><b>${esc(g[0])}</b>　${esc(g[1])}</div>`).join("")}</div></div>` : ""}
+  </div><div class="bottom"><div class="in"><button class="btn green full" data-act="kquiz">問いに答える</button></div></div>`;
+}
+function vWrite(u) {
+  const w = u.write,
+    draft = S.kwrite[u.id] || "";
+  return `${ktop("書く")}<div class="lbody" style="padding-bottom:150px"><div class="stack">
+  <div class="card"><p style="font-weight:800">${esc(w.task)}</p>${(w.hints || []).length ? `<ul class="hints">${w.hints.map((h) => `<li>${esc(h)}</li>`).join("")}</ul>` : ""}</div>
+  <textarea id="kwrite" class="field" rows="5" autocapitalize="off" spellcheck="false" placeholder="イタリア語で書いてみましょう" aria-label="作文">${esc(draft)}</textarea>
+  <div class="accents" style="margin:0">${["à", "è", "é", "ì", "ò", "ù"].map((c) => `<button data-act="kwacc" data-v="${c}" aria-label="${c} を入力">${c}</button>`).join("")}</div>
+  <button class="btn full" data-act="kmodel">${kst.model ? "見本を隠す" : "見本を見る"}</button>
+  ${
+    kst.model
+      ? `<div class="card"><p style="font-weight:800">${esc(w.model)}</p><p class="cap" style="margin-top:6px">${esc(w.modelJa)}</p><div style="margin-top:10px"><button class="spk" data-act="say" data-v="${esc(w.model)}" aria-label="見本を再生">${I.spk}</button></div></div>
+  <div class="card"><p style="font-weight:800;margin-bottom:8px">自分で確かめる</p>${w.check.map((c) => `<label class="check" style="margin-bottom:6px;font-weight:600"><input type="checkbox">${esc(c)}</label>`).join("")}</div>`
+      : ""
+  }
+  <button class="btn full" data-act="kprompt">AIに添削を頼む文をコピー</button>
+  ${kst.prompt ? `<textarea id="kprompt" class="field" rows="6" readonly style="font-size:14px" aria-label="添削依頼文">${esc(kst.prompt)}</textarea><p class="cap">${kst.copied ? "コピーしました。" : "自動でコピーできませんでした。上の文を選択してコピーしてください。"}Claude などに貼り付けると添削してもらえます。AIの添削にも誤りはあります。</p>` : ""}
+  </div></div><div class="bottom"><div class="in"><button class="btn green full" data-act="kfin">書けました</button></div></div>`;
+}
+
+/* ---------- 録音して聞き比べ（音は端末の中だけ） ---------- */
+function recSupported() {
+  try {
+    return !!(
+      navigator.mediaDevices &&
+      navigator.mediaDevices.getUserMedia &&
+      window.MediaRecorder
+    );
+  } catch (e) {
+    return false;
+  }
+}
+async function recToggle(i) {
+  if (recS.rec) {
+    try {
+      recS.rec.stop();
+    } catch (e) {}
+    return;
+  }
+  try {
+    speechSynthesis.cancel();
+  } catch (e) {}
+  recS.err = "";
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const chunks = [],
+      r = new MediaRecorder(stream);
+    r.ondataavailable = (e) => {
+      if (e.data && e.data.size) chunks.push(e.data);
+    };
+    r.onstop = () => {
+      stream.getTracks().forEach((t) => t.stop());
+      if (recS.url) URL.revokeObjectURL(recS.url);
+      recS.url = chunks.length
+        ? URL.createObjectURL(
+            new Blob(chunks, { type: r.mimeType || "audio/mp4" }),
+          )
+        : null;
+      recS.rec = null;
+      if (view === "kstep") render();
+    };
+    recS.line = i;
+    recS.url = null;
+    recS.rec = r;
+    r.start();
+  } catch (e) {
+    recS.rec = null;
+    recS.err =
+      "マイクを使えませんでした。ブラウザの設定でマイクを許可してください。";
+  }
+  if (view === "kstep") render();
+}
+function recStopIfAny() {
+  if (recS.rec) {
+    try {
+      recS.rec.stop();
+    } catch (e) {}
+  }
+}
+function sayAll(list) {
+  try {
+    speechSynthesis.cancel();
+    const v = voices.find((x) => x.name === S.settings.voice) || voices[0];
+    list.forEach((t) => {
+      const u = new SpeechSynthesisUtterance(t);
+      u.lang = "it-IT";
+      if (v) u.voice = v;
+      u.rate = S.settings.rate;
+      speechSynthesis.speak(u);
+    });
+  } catch (e) {}
+}
+
+/* ---------- 問題（語彙・文法・読解・テスト・復習で共通） ---------- */
+const strictNorm = (s) =>
+  s
+    .toLowerCase()
+    .replace(/[’']/g, "")
+    .replace(/[^a-zà-ÿ0-9 ]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+const isLatinQ = (s) => /___/.test(s);
+function mcFrom(g, extra) {
+  const correct = g.o[g.a];
+  return Object.assign(
+    {
+      t: "mc",
+      q: g.q || g.s,
+      o: g.o.slice(),
+      correct,
+      why: g.why || "",
+      skill: g.skill || null,
+      say:
+        g.say ||
+        (isLatinQ(g.q || g.s || "")
+          ? (g.q || g.s)
+              .replace(/___/g, correct)
+              .replace(/\s*[（(][^）)]*[）)]/g, "")
+              .replace(/' /g, "'")
+          : ""),
+    },
+    extra || {},
+  );
+}
+function orderFrom(g) {
+  const first = g.it[0],
+    tiles = shuffle(first.split(" ").map(core));
+  return {
+    t: "order",
+    ja: g.ja,
+    ok: g.it,
+    show: first,
+    tiles,
+    built: [],
+    val: "",
+  };
+}
+function wordItems(list) {
+  // 語彙の問題。意味→語、語→意味を交互に。選択肢は同じ単元を優先する
+  const allW = Object.values(WM);
+  return list.map((w, i) => {
+    const dir = i % 2,
+      key = dir ? "it" : "ja",
+      same = allW.filter((x) => x.it !== w.it && x.u === w.u),
+      rest = allW.filter((x) => x.it !== w.it && x.u !== w.u);
+    const seen = { [w[key]]: 1 },
+      o = [];
+    shuffle(same)
+      .concat(shuffle(rest))
+      .forEach((x) => {
+        if (o.length < 3 && !seen[x[key]]) {
+          seen[x[key]] = 1;
+          o.push(x[key]);
+        }
+      });
+    return {
+      t: "mc",
+      q: dir ? `「${w.ja}」はイタリア語で？` : `${w.it} の意味は？`,
+      o: shuffle([w[key]].concat(o)),
+      correct: w[key],
+      why: w.note || "",
+      say: w.it,
+      word: w.it,
+    };
+  });
+}
+function dictItem(lines) {
+  // 書き取り：短い文を1つ。アクセントの違いは正解のまま注意する
+  const c = lines.filter(
+    (l) => l.it.split(" ").length >= 3 && l.it.split(" ").length <= 9,
+  );
+  if (!c.length) return [];
+  const l = pick(c);
+  return [{ t: "dict", it: l.it, ja: l.ja, val: "" }];
+}
+function startQuiz(items, meta) {
+  items.forEach((e) => {
+    e.state = "idle";
+    e.sel = null;
+    if (e.t === "mc") e.o = shuffle(e.o);
+  });
+  kq = Object.assign(
+    { ex: items, i: 0, right: 0, wrong: 0, played: false },
+    meta,
+  );
+  go("kq");
+}
+function quizForStep() {
+  const u = kst.u;
+  if (kst.st === "words")
+    return wordItems(
+      shuffle(u.words.map((w) => WM[w[0]]).filter(Boolean)).slice(0, 10),
+    );
+  if (kst.st === "gram")
+    return u.gram.map((g) => (g.t === "order" ? orderFrom(g) : mcFrom(g)));
+  return u.read.q
+    .map((g) => mcFrom(g))
+    .concat(dictItem(u.read.lines.map((l) => ({ it: l[0], ja: l[1] }))));
+}
+function startReview() {
+  const list = dueWords()
+    .slice(0, REVIEW_CAP)
+    .map((w) => WM[w]);
+  if (!list.length) return;
+  startQuiz(wordItems(shuffle(list)), { kind: "review", back: "today" });
+}
+function startTest(g) {
+  const us = KU.filter((u) => u.g === g),
+    pool = [];
+  us.forEach((u) => {
+    u.gram.filter((x) => x.t !== "order").forEach((x) => pool.push(mcFrom(x)));
+    u.read.q.forEach((x) => pool.push(mcFrom(x)));
+  });
+  const words = us.flatMap((u) => u.words.map((w) => WM[w[0]])).filter(Boolean);
+  const items = shuffle(pool)
+    .slice(0, 9)
+    .concat(wordItems(shuffle(words).slice(0, 4)));
+  const orders = us.flatMap((u) => u.gram.filter((x) => x.t === "order"));
+  shuffle(orders)
+    .slice(0, 2)
+    .forEach((o) => items.push(orderFrom(o)));
+  startQuiz(shuffle(items), { kind: "test", g, back: "kok" });
+}
+const kcur = () => kq.ex[kq.i];
+const kCan = (e) =>
+  e.t === "mc"
+    ? e.sel != null
+    : e.t === "order"
+      ? e.built.length > 0
+      : !!(e.val && e.val.trim());
+function vKq() {
+  const e = kcur(),
+    n = kq.ex.length;
+  let body = "";
+  if (e.t === "mc") {
+    body = `${e.skill ? `<span class="tag" style="margin-bottom:8px;display:inline-block">${SKILL[e.skill] || ""}</span>` : ""}<div class="ask">${esc(e.q)}</div><div class="opts">${e.o
+      .map((o, i) => {
+        let c = "opt";
+        if (e.state !== "idle") {
+          if (o === e.correct) c += " right";
+          else if (e.sel === i) c += " wrong";
+        } else if (e.sel === i) c += " sel";
+        return `<button class="${c}" data-act="kopt" data-v="${i}" ${e.state !== "idle" ? "disabled" : ""}><span class="k">${i + 1}</span><span>${esc(o)}</span></button>`;
+      })
+      .join("")}</div>`;
+  }
+  if (e.t === "order") {
+    body = `<div class="ask">イタリア語に並べてください</div>${bubble(esc(e.ja), "", null)}<div class="ans">${e.built.map((i) => `<button class="tile" data-act="kuntile" data-v="${i}" ${e.state !== "idle" ? "disabled" : ""}>${esc(e.tiles[i])}</button>`).join("")}</div>
+    <div class="bank">${e.tiles.map((t, i) => (e.built.includes(i) ? `<span class="tile ghost">${esc(t)}</span>` : `<button class="tile" data-act="ktile" data-v="${i}" ${e.state !== "idle" ? "disabled" : ""}>${esc(t)}</button>`)).join("")}</div>`;
+  }
+  if (e.t === "dict") {
+    body = `<div class="ask">書き取り：聞こえた文を書いてください</div><div style="display:flex;gap:14px;align-items:center;margin-bottom:18px"><button class="spk big" data-act="say" data-v="${esc(e.it)}" aria-label="再生">${I.spk}</button><button class="btn sm" data-act="slow" data-v="${esc(e.it)}">ゆっくり</button></div>
+    <input id="kans" class="field" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(e.val)}" ${e.state !== "idle" ? "disabled" : ""} placeholder="イタリア語で入力" aria-label="聞こえた文">
+    ${e.state === "idle" ? `<div class="accents">${["à", "è", "é", "ì", "ò", "ù"].map((c) => `<button data-act="kacc" data-v="${c}" aria-label="${c} を入力">${c}</button>`).join("")}</div>` : ""}`;
+  }
+  const ok = e.state === "right";
+  const ansTxt = e.t === "mc" ? e.correct : e.t === "order" ? e.show : e.it;
+  const notes =
+    (ok ? "" : `<div>${esc(ansTxt)}</div>`) +
+    (e.t === "dict" && e.accWarn
+      ? `<div>アクセントに注意：${esc(e.it)}</div>`
+      : "") +
+    (e.t === "dict" && !ok
+      ? `<div style="font-weight:600;font-size:13px">${esc(e.ja)}</div>`
+      : "") +
+    (e.why
+      ? `<div style="font-weight:600;font-size:13px">${esc(e.why)}</div>`
+      : "");
+  const audio = e.t === "mc" ? e.say : e.t === "order" ? e.show : e.it;
+  const bar =
+    e.state === "idle"
+      ? `<div class="abar"><div class="in"><button class="btn full ${kCan(e) ? "green" : "off"}" data-act="kcheck" ${kCan(e) ? "" : "disabled"}>確認</button></div></div>`
+      : `<div class="abar ${e.state}"><div class="in"><div class="fb"><span class="ic">${ok ? I.check : I.cross}</span><div class="tx"><b>${ok ? pick(["正解です！", "いいですね！", "Bravo!"]) : "正解は…"}</b>${notes}</div>${audio ? `<button class="spk" data-act="say" data-v="${esc(audio)}" aria-label="再生">${I.spk}</button>` : ""}</div><button class="btn full ${ok ? "green" : "red"}" data-act="kcont">続ける</button></div></div>`;
+  return `<div class="ltop"><button class="x" data-act="kquit" aria-label="閉じる">×</button><div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round((kq.i / n) * 100)}"><i style="width:${Math.max(4, Math.round((kq.i / n) * 100))}%"></i></div></div><div class="lbody">${body}</div>${bar}`;
+}
+function kCheck() {
+  const e = kcur();
+  if (e.state !== "idle" || !kCan(e)) return;
+  let ok = false;
+  if (e.t === "mc") ok = e.o[e.sel] === e.correct;
+  if (e.t === "order") {
+    const a = norm(e.built.map((i) => e.tiles[i]).join(" "));
+    ok = e.ok.some((x) => norm(x) === a);
+  }
+  if (e.t === "dict") {
+    const a = $("#kans");
+    if (a && a.value != null && a.value !== "") e.val = a.value;
+    ok = norm(e.val) === norm(e.it);
+    e.accWarn = ok && strictNorm(e.val) !== strictNorm(e.it);
+  }
+  e.state = ok ? "right" : "wrong";
+  if (e.word && !e.retry) {
+    gradeWord(e.word, ok);
+    save();
+  }
+  if (!e.retry) {
+    if (ok) kq.right++;
+    else kq.wrong++;
+  }
+  if (!ok && !e.retry && kq.kind !== "test") {
+    const c = Object.assign({}, e, {
+      state: "idle",
+      sel: null,
+      retry: true,
+      accWarn: false,
+    });
+    if (c.t === "order") {
+      c.built = [];
+      c.tiles = shuffle(c.tiles);
+    }
+    if (c.t === "dict") c.val = "";
+    if (c.t === "mc") c.o = shuffle(c.o);
+    kq.ex.push(c);
+  }
+  render();
+  const au = e.t === "mc" ? e.say : e.t === "order" ? e.show : e.it;
+  if (au) setTimeout(() => say(au), 120);
+}
+function kCont() {
+  const e = kcur();
+  if (e.state === "idle") return;
+  kq.i++;
+  if (kq.i >= kq.ex.length) kFinish();
+  else {
+    render();
+    window.scrollTo(0, 0);
+  }
+}
+function kFinish() {
+  const total = kq.right + kq.wrong;
+  kq.acc = total ? Math.round((kq.right / total) * 100) : 100;
+  kq.xp = kq.kind === "test" ? 10 : 5 + (kq.wrong === 0 ? 2 : 0);
+  if (kq.kind === "step") {
+    markStep(kq.u, kq.st);
+    // 語彙の単元は、出題されなかった語も復習に入れる
+    if (kq.st === "words")
+      KBY[kq.u].words.forEach((w) => {
+        if (!S.kw[w[0]]) S.kw[w[0]] = { box: 0, due: dayNum(), ok: 0, ng: 0 };
+      });
+  }
+  if (kq.kind === "test") S.ktest[kq.g] = Math.max(S.ktest[kq.g] || 0, kq.acc);
+  addXp(kq.xp);
+  save();
+  go("kqdone");
+}
+function vKqDone() {
+  const back =
+    kq.kind === "step"
+      ? `<button class="btn green full" data-act="unit" data-v="${kq.u}">単元に戻る</button>`
+      : `<button class="btn green full" data-act="tab" data-v="${kq.back}">戻る</button>`;
+  const title =
+    kq.kind === "test"
+      ? `段階${kq.g}の確認テスト`
+      : kq.kind === "review"
+        ? "復習完了！"
+        : "よくできました！";
+  return `<div class="center">${lumi()}<div class="big">${title}</div>
+   <div class="results"><div class="rc xp"><div class="h">XP</div><div class="v">${I.bolt}${kq.xp}</div></div>
+   <div class="rc ac"><div class="h">正解率</div><div class="v">${kq.acc}%</div></div>
+   <div class="rc st"><div class="h">連続</div><div class="v">${I.fire}${streak()}</div></div></div>
+   <p class="cap">${kq.kind === "test" ? (kq.acc >= 70 ? "次の段階に進む目安を超えました。" : "目安は70%です。先に進んでも、戻って復習しても大丈夫です。") : `今日のXP：${xpToday()} / ${S.goal}`}</p></div>
+   <div class="bottom"><div class="in">${back}</div></div>`;
+}
+function writePrompt(u) {
+  const a =
+    ($("#kwrite") && $("#kwrite").value) ||
+    S.kwrite[u.id] ||
+    "(まだ書いていません)";
+  return `イタリア語を勉強中の初心者です。次の作文を添削してください。\n課題：${u.write.task}\n私の作文：${a}\n\n間違いを直した文を示し、直した理由を日本語で短く説明してください。段階${u.g}の学習者なので、難しい文法は使わずに直してください。`;
+}
+
+/* ---------- 記録の移動 ---------- */
+const NUM_MAPS = ["days", "xp"],
+  OBJ_KEYS = ["verbs", "done", "ph", "k", "kw", "kwrite", "ktest"];
+function exportCode() {
+  return "PP1:" + btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+}
+function parseImport(text) {
+  const t = text.trim();
+  if (!t.startsWith("PP1:")) throw new Error("記録のコードではありません。");
+  let p;
+  try {
+    p = JSON.parse(decodeURIComponent(escape(atob(t.slice(4)))));
+  } catch (e) {
+    throw new Error("コードが壊れています。全文をコピーしてください。");
+  }
+  if (!p || typeof p !== "object" || Array.isArray(p))
+    throw new Error("記録の形式が正しくありません。");
+  const d = defaults();
+  OBJ_KEYS.concat(NUM_MAPS).forEach((k) => {
+    const v = p[k];
+    if (v != null && (typeof v !== "object" || Array.isArray(v)))
+      throw new Error("記録の形式が正しくありません。");
+    if (v) d[k] = v;
+  });
+  ["xpTotal", "goal", "plan"].forEach((k) => {
+    if (typeof p[k] === "number" && isFinite(p[k])) d[k] = p[k];
+  });
+  d.unlockAll = p.unlockAll === true;
+  if (p.settings && typeof p.settings === "object") {
+    if (typeof p.settings.rate === "number")
+      d.settings.rate = Math.min(1.1, Math.max(0.5, p.settings.rate));
+    if (typeof p.settings.voice === "string")
+      d.settings.voice = p.settings.voice;
+  }
+  // 動詞の記録の中身が数値でないものは捨てる（壊れたデータで画面が崩れないように）
+  ["verbs", "kw"].forEach((k) => {
+    Object.keys(d[k]).forEach((x) => {
+      const r = d[k][x];
+      if (!r || typeof r.box !== "number" || typeof r.due !== "number")
+        delete d[k][x];
+    });
+  });
+  ["xp", "days", "ktest"].forEach((k) => {
+    Object.keys(d[k]).forEach((x) => {
+      if (typeof d[k][x] !== "number" || !isFinite(d[k][x])) delete d[k][x];
+    });
+  });
+  Object.keys(d.done).forEach((x) => {
+    const r = d.done[x];
+    if (!r || typeof r !== "object" || typeof r.best !== "number" || typeof r.n !== "number") delete d.done[x];
+  });
+  Object.keys(d.kwrite).forEach((x) => {
+    if (typeof d.kwrite[x] !== "string") delete d.kwrite[x];
+  });
+  return d;
+}
+function moveCard() {
+  return `<h3 class="sectitle">記録の移動（Macとスマホの間）</h3><div class="stack">
+  <div class="card"><p class="cap" style="margin-bottom:10px">書き出したコードを、別の端末の「読み込み」に貼り付けます。自動では同期しません。</p>
+   <button class="btn full" data-act="kexport">書き出してコピー</button>
+   ${moveOut ? `<textarea id="kout" class="field" rows="3" readonly style="font-size:12px;margin-top:10px" aria-label="記録のコード">${esc(moveOut)}</textarea>` : ""}</div>
+  <div class="card"><textarea id="kin" class="field" rows="3" style="font-size:12px" placeholder="ここにコードを貼り付け" aria-label="読み込むコード"></textarea>
+   <button class="btn full" style="margin-top:10px" data-act="kimport">読み込む（今の記録と置き換え）</button>
+   <p class="cap" style="margin-top:8px">読み込む前の記録は、1回分だけこの端末に控えます。</p>
+   ${S_hasBackup() ? '<button class="btn full quiet" data-act="krestore">控えに戻す</button>' : ""}</div>
+  ${moveMsg ? `<div class="notice" ${moveErr ? 'style="background:var(--red-s)"' : ""}>${esc(moveMsg)}</div>` : ""}</div>`;
+}
+function S_hasBackup() {
+  try {
+    return !!localStorage.getItem(KEY + "-bak");
+  } catch (e) {
+    return false;
+  }
+}
+
+Object.assign(ACT, {
+  plan(v) {
+    S.plan = +v;
+    save();
+    render();
+  },
+  unit(v) {
+    recStopIfAny();
+    kuid = v;
+    kst = null;
+    go("unit");
+  },
+  kstep(v) {
+    const p = v.split("|");
+    openStep(p[0], p[1]);
+  },
+  kline(v) {
+    kst.show[v] = !kst.show[v];
+    const u = kst.u,
+      l = kst.st === "talk" ? u.talk[+v][1] : u.read.lines[+v][0];
+    render();
+    if (kst.show[v]) say(l);
+  },
+  khide() {
+    kst.hide = !kst.hide;
+    kst.show = {};
+    render();
+  },
+  ksayall() {
+    const u = kst.u;
+    sayAll(
+      kst.st === "talk"
+        ? u.talk.map((l) => l[1])
+        : u.read.lines.map((l) => l[0]),
+    );
+  },
+  krec(v) {
+    recToggle(+v);
+  },
+  krecplay() {
+    if (recS.url) {
+      try {
+        new Audio(recS.url).play();
+      } catch (e) {}
+    }
+  },
+  kquiz() {
+    const items = quizForStep();
+    startQuiz(items, { kind: "step", u: kst.u.id, st: kst.st, back: "kok" });
+  },
+  kfin() {
+    recStopIfAny();
+    const u = kst.u,
+      st = kst.st;
+    if (st === "write") {
+      const a = $("#kwrite");
+      if (a && a.value != null) S.kwrite[u.id] = a.value;
+    }
+    markStep(u.id, st);
+    addXp(5);
+    save();
+    kuid = u.id;
+    kst = null;
+    go("unit");
+  },
+  kmodel() {
+    const a = $("#kwrite");
+    if (a && a.value != null) S.kwrite[kst.u.id] = a.value;
+    save();
+    kst.model = !kst.model;
+    render();
+  },
+  kprompt() {
+    const u = kst.u,
+      a = $("#kwrite");
+    if (a && a.value != null) S.kwrite[u.id] = a.value;
+    save();
+    kst.prompt = writePrompt(u);
+    kst.copied = false;
+    const done = () => render();
+    try {
+      navigator.clipboard.writeText(kst.prompt).then(() => {
+        kst.copied = true;
+        done();
+      }, done);
+    } catch (e) {
+      done();
+    }
+  },
+  kwacc(v) {
+    const a = $("#kwrite");
+    if (!a) return;
+    const s = a.selectionStart == null ? a.value.length : a.selectionStart,
+      t = a.selectionEnd == null ? s : a.selectionEnd;
+    a.value = a.value.slice(0, s) + v + a.value.slice(t);
+    S.kwrite[kst.u.id] = a.value;
+    a.focus();
+    a.setSelectionRange(s + 1, s + 1);
+  },
+  kopt(v) {
+    const e = kcur();
+    if (e.state !== "idle") return;
+    e.sel = +v;
+    render();
+  },
+  ktile(v) {
+    const e = kcur();
+    if (e.state !== "idle") return;
+    e.built.push(+v);
+    render();
+  },
+  kuntile(v) {
+    const e = kcur();
+    if (e.state !== "idle") return;
+    e.built = e.built.filter((i) => i !== +v);
+    render();
+  },
+  kacc(v) {
+    const a = $("#kans");
+    if (!a) return;
+    const s = a.selectionStart == null ? a.value.length : a.selectionStart,
+      t = a.selectionEnd == null ? s : a.selectionEnd;
+    a.value = a.value.slice(0, s) + v + a.value.slice(t);
+    kcur().val = a.value;
+    a.focus();
+    a.setSelectionRange(s + 1, s + 1);
+    const b = document.querySelector(".abar .btn.full");
+    if (b) {
+      b.disabled = !a.value.trim();
+      b.classList.toggle("green", !b.disabled);
+      b.classList.toggle("off", b.disabled);
+    }
+  },
+  kcheck() {
+    kCheck();
+  },
+  kcont() {
+    kCont();
+  },
+  kquit() {
+    const q = kq;
+    kq = null;
+    if (q.kind === "step") go("unit");
+    else go(q.back);
+  },
+  krev() {
+    startReview();
+  },
+  ktest(v) {
+    startTest(+v);
+  },
+  tense(v) {
+    vtense = v;
+    render();
+  },
+  kexport() {
+    moveOut = exportCode();
+    moveMsg = "コードを作りました。";
+    moveErr = false;
+    const r = () => render();
+    try {
+      navigator.clipboard.writeText(moveOut).then(() => {
+        moveMsg = "コードをコピーしました。別の端末で貼り付けてください。";
+        r();
+      }, r);
+    } catch (e) {
+      r();
+    }
+  },
+  kimport() {
+    const a = $("#kin");
+    const val = a ? a.value : "";
+    try {
+      const d = parseImport(val);
+      try {
+        localStorage.setItem(KEY + "-bak", JSON.stringify(S));
+      } catch (e) {}
+      S = d;
+      save();
+      moveMsg = "記録を読み込みました。";
+      moveErr = false;
+      moveOut = "";
+    } catch (e) {
+      moveMsg = e.message;
+      moveErr = true;
+    }
+    render();
+  },
+  krestore() {
+    try {
+      const r = localStorage.getItem(KEY + "-bak");
+      if (r) {
+        const d = defaults();
+        const p = JSON.parse(r);
+        S = Object.assign(d, p, {
+          settings: Object.assign(d.settings, p.settings || {}),
+        });
+        save();
+        localStorage.removeItem(KEY + "-bak");
+        moveMsg = "読み込む前の記録に戻しました。";
+        moveErr = false;
+      }
+    } catch (e) {
+      moveMsg = "戻せませんでした。";
+      moveErr = true;
+    }
+    render();
+  },
+});
+document.addEventListener("keydown", (e) => {
+  if (
+    view !== "kq" ||
+    !kq ||
+    e.key !== "Enter" ||
+    (e.target && e.target.tagName === "BUTTON")
+  )
+    return;
+  const c = kcur();
+  if (!c) return;
+  e.preventDefault();
+  if (c.state !== "idle") kCont();
+  else kCheck();
+});
+document.addEventListener("input", (e) => {
+  const t = e.target;
+  if (t.id === "kans" && view === "kq" && kq) {
+    const c = kcur();
+    c.val = t.value;
+    const b = document.querySelector(".abar .btn.full");
+    if (b && c.state === "idle") {
+      const ok = t.value.trim().length > 0;
+      b.disabled = !ok;
+      b.classList.toggle("green", ok);
+      b.classList.toggle("off", !ok);
+    }
+  }
+  if (t.id === "kwrite" && kst) {
+    S.kwrite[kst.u.id] = t.value;
+    save();
+  }
+});
 function matchTry(e){
   if(e.sl==null||e.sr==null){render();return;}
   const l=e.L[e.sl],r=e.R[e.sr];
@@ -2464,6 +3650,6 @@ document.addEventListener('change',e=>{
 render();
 })();
 </script>
-<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').then(function(r){document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')r.update().catch(function(){});});}).catch(function(){});});}</script>
 </body>
 </html>

@@ -337,13 +337,13 @@ select{font:inherit;font-weight:700;padding:10px 12px;border-radius:12px;border:
 </div></nav>
 
 <script>window.KOKUGO=[];</script>
-<script src="js/k1.js?v=20261107120343"></script>
-<script src="js/k2.js?v=20261107120343"></script>
-<script src="js/k3.js?v=20261107120343"></script>
-<script src="js/k4.js?v=20261107120343"></script>
-<script src="js/k5.js?v=20261107120343"></script>
-<script src="js/k6.js?v=20261107120343"></script>
-<script src="js/k7.js?v=20261107120343"></script>
+<script src="js/k1.js?v=20261107160815"></script>
+<script src="js/k2.js?v=20261107160815"></script>
+<script src="js/k3.js?v=20261107160815"></script>
+<script src="js/k4.js?v=20261107160815"></script>
+<script src="js/k5.js?v=20261107160815"></script>
+<script src="js/k6.js?v=20261107160815"></script>
+<script src="js/k7.js?v=20261107160815"></script>
 <script>
 (function(){
 'use strict';
@@ -534,7 +534,7 @@ const TAB_OF={goal:'me',verbs:'path',practice:'today',read:'kok',words:'kok'};
 const cur=()=>sess.ex[sess.i];
 function go(v){view=v;confirmReset=false;render();window.scrollTo(0,0);}
 function render(){
-  const fn={goal:vGoal,vt:vVt,read:vRead,words:vWords,story:vStory,err:vErr,credits:vCredits,today:vToday,kok:vKok,kmap:vKmap,unit:vUnit,kstep:vKstep,kq:vKq,kqdone:vKqDone,path:vPath,verbs:vVerbs,verb:vVerb,phr:vPhr,pq:vPq,pqdone:vPqDone,practice:vPractice,me:vMe,guide:vGuide,intro:vIntro,ex:vEx,done:vDone,fail:vFail}[view];
+  const fn={goal:vGoal,vt:vVt,read:vReadList,words:vWordHub,story:vStory,err:vErr,credits:vCredits,today:vToday,kok:vKok,kmap:vKmap,unit:vUnit,kstep:vKstep,kq:vKq,kqdone:vKqDone,path:vPath,verbs:vVerbs,verb:vVerb,phr:vPhr,pq:vPq,pqdone:vPqDone,practice:vPractice,me:vMe,guide:vGuide,intro:vIntro,ex:vEx,done:vDone,fail:vFail}[view];
   $('#app').innerHTML=(saveFailed?'<div class="notice" style="margin-top:10px">記録を保存できませんでした。プライベートモードや、端末の空き容量を確認してください。</div>':'')+fn();
   $('#tabs').hidden=!TABS.includes(view);
   const curTab=TAB_OF[view]||view;
@@ -3830,11 +3830,12 @@ function dataNotice() {
 }
 
 /* ---------- 読書：一覧 ---------- */
+const LV_NAME = {1:"レベル1（現在形）",2:"レベル2（過去形）",3:"レベル3（教科と冒険）",4:"原文：ピノッキオ",5:"原文：カプアーナの童話",6:"原文：クオーレ"};
 function knownRatio(s) {
   if (!s.w.length) return 0;
   return Math.round((s.w.filter(isKnown).length / s.w.length) * 100);
 }
-function vRead() {
+function vReadList() {
   const n = dataNotice();
   if (n) return kseg() + n;
   const total = STIDX.reduce((a, s) => a + s.n, 0),
@@ -3847,7 +3848,7 @@ function vRead() {
   ${lvs
     .map(
       (l) =>
-        `<h3 class="sectitle">レベル ${l}</h3><div class="stack">${STIDX.filter(
+        `<h3 class="sectitle">${LV_NAME[l] || "レベル " + l}</h3><div class="stack">${STIDX.filter(
           (s) => s.lv === l,
         )
           .map((s) => {
@@ -3906,7 +3907,7 @@ function storyLine(l, i) {
     html += esc(l.it.slice(pos));
   }
   return `<div class="sline"><div class="st">${html}${shown ? `<span class="ja">${esc(l.ja)}</span>` : ""}</div>
-   <div class="sbtn"><button class="spk" data-act="say" data-v="${esc(l.it)}" aria-label="文を再生">${I.spk}</button><button class="chip" data-act="sline" data-v="${i}">訳</button></div></div>`;
+   <div class="sbtn"><button class="spk" data-act="say" data-v="${esc(l.it)}" aria-label="文を再生">${I.spk}</button>${l.ja ? `<button class="chip" data-act="sline" data-v="${i}">訳</button>` : ""}</div></div>`;
 }
 function sheetHtml() {
   const id = sopen.sheet;
@@ -3953,7 +3954,7 @@ function vStory() {
   ${d.note ? `<div class="tip" style="margin-top:8px">${esc(d.note)}</div>` : ""}
   <div class="seg" style="margin:12px 0"><button class="btn sm blue" data-act="sayst">全部聞く</button><button class="btn sm" data-act="shide">${sopen.hide ? "文字を出す" : "文字を隠す"}</button><button class="btn sm quiet" data-act="errnew" data-v="話：${esc(d.title)}">誤りを報告</button></div>
   <div class="stack">${d.lines.map(storyLine).join("")}</div>
-  </div><div class="bottom"><div class="in"><button class="btn green full" data-act="stq">読み終えた：問いに答える</button></div></div>${sheetHtml()}`;
+  </div><div class="bottom"><div class="in"><button class="btn green full" data-act="stq">${sopen.data.q.length ? "読み終えた：問いに答える" : "読み終えた"}</button></div></div>${sheetHtml()}`;
 }
 
 /* ---------- 単語の学習 ---------- */
@@ -3972,7 +3973,7 @@ function wordSearch() {
     ? hit.map(wordRow).join("")
     : '<p class="cap" style="text-align:center;padding:16px">見つかりませんでした</p>';
 }
-function vWords() {
+function vWordHub() {
   const n = dataNotice();
   if (n) return kseg() + n;
   const learned = Object.keys(S.w).length,
@@ -4005,7 +4006,7 @@ function vCredits() {
   return `<div class="ltop"><button class="x" data-act="tab" data-v="me" aria-label="戻る">${I.back}</button><h2 style="flex:1">出典と利用条件</h2></div>
   <div class="lbody" style="padding-bottom:40px"><div class="stack"><div class="card"><p style="font-weight:800;margin-bottom:6px">語彙の選定</p><p class="kb">語の頻度順に <a href="https://github.com/rspeer/wordfreq">wordfreq</a> のデータ（CC BY-SA 4.0）を参考にしました。これをもとにした語彙表も CC BY-SA 4.0 で扱います。意味の訳はこのアプリの書き下ろしです。</p></div>
   <div class="card"><p style="font-weight:800;margin-bottom:6px">活用</p><p class="kb">動詞の活用形の生成と照合に <a href="https://github.com/bretttolbert/verbecc">verbecc</a> を使いました。</p></div>
-  <div class="card"><p style="font-weight:800;margin-bottom:6px">読み物と国語コース</p><p class="kb">AIによる書き下ろしです。『ピノッキオ』はCarlo Collodi（1883年、著作権切れ）の原作をやさしく書き直したものです。イソップ系の話は、昔から伝わる話を書き直したものです。</p></div>
+  <div class="card"><p style="font-weight:800;margin-bottom:6px">読み物と国語コース</p><p class="kb">AIによる書き下ろしです。連載の『ピノッキオ』はCarlo Collodi（1883年、著作権切れ）の原作をやさしく書き直したものです。「原文」の本文は <a href="https://it.wikisource.org/">Wikisource</a> のもので、CC BY-SA 3.0 で提供されています（Collodi、Capuana、De Amicis）。章の要約と設問は書き下ろしです。イソップ系の話は、昔から伝わる話を書き直したものです。</p></div>
   <div class="card"><p class="cap">教材のイタリア語はAIが作成し、機械検査とAIの校正を通しています。誤りが残っている可能性があります。</p></div></div></div>`;
 }
 
@@ -4093,6 +4094,15 @@ Object.assign(ACT, {
   stq() {
     const d = sopen.data;
     if (!d) return;
+    if (!d.q.length) {
+      const prev = S.st[d.id];
+      if (!prev || !prev.done) S.rwords += d.n;
+      S.st[d.id] = { done: dayNum(), taps: sopen.taps };
+      addXp(8);
+      save();
+      go("read");
+      return;
+    }
     const items = d.q.map((q) => ({
       t: "mc",
       q: q.s,

@@ -290,6 +290,7 @@ textarea.field{resize:vertical;font-size:17px;line-height:1.5}
 
 
 /* ---- reader ---- */
+.lvd summary{cursor:pointer;padding:6px 0}
 .sline{display:flex;gap:10px;align-items:flex-start;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:10px 12px}
 .sline .st{flex:1;min-width:0;font-size:19px;font-weight:700;line-height:1.85}
 .sline .ja{display:block;font-size:14px;line-height:1.5;font-weight:600;margin-top:4px;color:var(--muted)}
@@ -337,13 +338,14 @@ select{font:inherit;font-weight:700;padding:10px 12px;border-radius:12px;border:
 </div></nav>
 
 <script>window.KOKUGO=[];</script>
-<script src="js/k1.js?v=20261107160815"></script>
-<script src="js/k2.js?v=20261107160815"></script>
-<script src="js/k3.js?v=20261107160815"></script>
-<script src="js/k4.js?v=20261107160815"></script>
-<script src="js/k5.js?v=20261107160815"></script>
-<script src="js/k6.js?v=20261107160815"></script>
-<script src="js/k7.js?v=20261107160815"></script>
+<script src="js/k1.js?v=20261107163355"></script>
+<script src="js/k2.js?v=20261107163355"></script>
+<script src="js/k3.js?v=20261107163355"></script>
+<script src="js/k4.js?v=20261107163355"></script>
+<script src="js/k5.js?v=20261107163355"></script>
+<script src="js/k6.js?v=20261107163355"></script>
+<script src="js/k7.js?v=20261107163355"></script>
+<script src="js/k8.js?v=20261107163355"></script>
 <script>
 (function(){
 'use strict';
@@ -3848,20 +3850,22 @@ function vReadList() {
   ${lvs
     .map(
       (l) =>
-        `<h3 class="sectitle">${LV_NAME[l] || "レベル " + l}</h3><div class="stack">${STIDX.filter(
+        `${l >= 4 ? `<details ${lastLv === l ? "open" : ""} class="lvd"><summary class="sectitle">${LV_NAME[l]}（${STIDX.filter((s) => s.lv === l).length}編）</summary>` : `<h3 class="sectitle">${LV_NAME[l] || "レベル " + l}</h3>`}<div class="stack">${STIDX.filter(
           (s) => s.lv === l,
         )
           .map((s) => {
             const st = S.st[s.id];
             return `<button class="task" data-act="story" data-v="${esc(s.id)}"><span class="tic ${st && st.done ? "ok" : ""}">${st && st.done ? I.check : I.book}</span><span class="a"><b>${esc(s.title)}</b><small>${esc(s.kind)}・${s.n}語</small></span><span class="min">${knownRatio(s)}%</span></button>`;
           })
-          .join("")}</div>`,
+          .join("")}</div>${l >= 4 ? "</details>" : ""}`,
     )
     .join("")}`;
 }
+let lastLv = null;
 async function openStory(id) {
   const s = STIDX.find((x) => x.id === id);
   if (!s) return;
+  lastLv = s.lv;
   sopen = {
     id,
     show: {},
@@ -3907,7 +3911,7 @@ function storyLine(l, i) {
     html += esc(l.it.slice(pos));
   }
   return `<div class="sline"><div class="st">${html}${shown ? `<span class="ja">${esc(l.ja)}</span>` : ""}</div>
-   <div class="sbtn"><button class="spk" data-act="say" data-v="${esc(l.it)}" aria-label="文を再生">${I.spk}</button>${l.ja ? `<button class="chip" data-act="sline" data-v="${i}">訳</button>` : ""}</div></div>`;
+   <div class="sbtn"><button class="spk" data-act="say" data-v="${esc(l.it)}" aria-label="文を再生">${I.spk}</button>${l.ja || sopen.hide ? `<button class="chip" data-act="sline" data-v="${i}">${l.ja ? "訳" : "表示"}</button>` : ""}</div></div>`;
 }
 function sheetHtml() {
   const id = sopen.sheet;

@@ -1,9 +1,9 @@
 /* オフライン用。ページ本体はネットワーク優先、版番号つきの教材はキャッシュ優先。
    data/ の教材は別のキャッシュに置き、更新しても消さない（ファイル名に内容のハッシュがつくので古い物を読むことはない）。
-   20261107160815 は deploy-web.sh が公開時に置き換える。手で書き換えない。 */
-const VERSION='piano-piano-20261107160815';
+   20261107163355 は deploy-web.sh が公開時に置き換える。手で書き換えない。 */
+const VERSION='piano-piano-20261107163355';
 const DATA='piano-piano-data';
-const CORE=['./','index.html','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png','icons/icon-180.png'].concat([1,2,3,4,5,6,7].map(n=>`js/k${n}.js?v=20261107160815`));
+const CORE=['./','index.html','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png','icons/icon-180.png'].concat([1,2,3,4,5,6,7,8].map(n=>`js/k${n}.js?v=20261107163355`));
 self.addEventListener('install',e=>{
   // HTTPキャッシュの古いファイルを掴まないように cache:'reload' で取り直す
   e.waitUntil(caches.open(VERSION).then(c=>c.addAll(CORE.map(u=>new Request(u,{cache:'reload'})))).then(()=>self.skipWaiting()));

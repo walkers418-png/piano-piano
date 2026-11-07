@@ -292,7 +292,7 @@ textarea.field{resize:vertical;font-size:17px;line-height:1.5}
 /* ---- reader ---- */
 .lvd summary{cursor:pointer;padding:6px 0}
 .sline{display:flex;gap:10px;align-items:flex-start;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:10px 12px}
-.sline .st{flex:1;min-width:0;font-size:19px;font-weight:700;line-height:1.85}
+.sline .st{flex:1;min-width:0;font-size:19px;font-weight:700;line-height:1.85;overflow-wrap:anywhere}
 .sline .ja{display:block;font-size:14px;line-height:1.5;font-weight:600;margin-top:4px;color:var(--muted)}
 .sline .sbtn{flex:none;display:flex;flex-direction:column;gap:6px;align-items:center}
 .sline .chip{min-height:34px;padding:2px 10px;border-bottom-width:2px}
@@ -338,14 +338,16 @@ select{font:inherit;font-weight:700;padding:10px 12px;border-radius:12px;border:
 </div></nav>
 
 <script>window.KOKUGO=[];</script>
-<script src="js/k1.js?v=20261107163355"></script>
-<script src="js/k2.js?v=20261107163355"></script>
-<script src="js/k3.js?v=20261107163355"></script>
-<script src="js/k4.js?v=20261107163355"></script>
-<script src="js/k5.js?v=20261107163355"></script>
-<script src="js/k6.js?v=20261107163355"></script>
-<script src="js/k7.js?v=20261107163355"></script>
-<script src="js/k8.js?v=20261107163355"></script>
+<script src="js/k1.js?v=20261107175139"></script>
+<script src="js/k2.js?v=20261107175139"></script>
+<script src="js/k3.js?v=20261107175139"></script>
+<script src="js/k4.js?v=20261107175139"></script>
+<script src="js/k5.js?v=20261107175139"></script>
+<script src="js/k6.js?v=20261107175139"></script>
+<script src="js/k7.js?v=20261107175139"></script>
+<script src="js/k8.js?v=20261107175139"></script>
+<script src="js/k9.js?v=20261107175139"></script>
+<script src="js/k10.js?v=20261107175139"></script>
 <script>
 (function(){
 'use strict';
@@ -3832,7 +3834,7 @@ function dataNotice() {
 }
 
 /* ---------- 読書：一覧 ---------- */
-const LV_NAME = {1:"レベル1（現在形）",2:"レベル2（過去形）",3:"レベル3（教科と冒険）",4:"原文：ピノッキオ",5:"原文：カプアーナの童話",6:"原文：クオーレ"};
+const LV_NAME = {1:"レベル1（現在形）",2:"レベル2（過去形）",3:"レベル3（教科と冒険）",4:"原文：ピノッキオ",5:"原文：カプアーナの童話",6:"原文：クオーレ",7:"原文：ジャン・ブッラスカの日記",8:"原文：コッローディの楽しい話"};
 function knownRatio(s) {
   if (!s.w.length) return 0;
   return Math.round((s.w.filter(isKnown).length / s.w.length) * 100);
@@ -4010,7 +4012,7 @@ function vCredits() {
   return `<div class="ltop"><button class="x" data-act="tab" data-v="me" aria-label="戻る">${I.back}</button><h2 style="flex:1">出典と利用条件</h2></div>
   <div class="lbody" style="padding-bottom:40px"><div class="stack"><div class="card"><p style="font-weight:800;margin-bottom:6px">語彙の選定</p><p class="kb">語の頻度順に <a href="https://github.com/rspeer/wordfreq">wordfreq</a> のデータ（CC BY-SA 4.0）を参考にしました。これをもとにした語彙表も CC BY-SA 4.0 で扱います。意味の訳はこのアプリの書き下ろしです。</p></div>
   <div class="card"><p style="font-weight:800;margin-bottom:6px">活用</p><p class="kb">動詞の活用形の生成と照合に <a href="https://github.com/bretttolbert/verbecc">verbecc</a> を使いました。</p></div>
-  <div class="card"><p style="font-weight:800;margin-bottom:6px">読み物と国語コース</p><p class="kb">AIによる書き下ろしです。連載の『ピノッキオ』はCarlo Collodi（1883年、著作権切れ）の原作をやさしく書き直したものです。「原文」の本文は <a href="https://it.wikisource.org/">Wikisource</a> のもので、CC BY-SA 3.0 で提供されています（Collodi、Capuana、De Amicis）。章の要約と設問は書き下ろしです。イソップ系の話は、昔から伝わる話を書き直したものです。</p></div>
+  <div class="card"><p style="font-weight:800;margin-bottom:6px">読み物と国語コース</p><p class="kb">AIによる書き下ろしです。連載の『ピノッキオ』はCarlo Collodi（1883年、著作権切れ）の原作をやさしく書き直したものです。「原文」の本文は <a href="https://it.wikisource.org/">Wikisource</a> のもので、CC BY-SA 3.0 で提供されています（Collodi、Capuana、De Amicis、Vamba）。章の要約と設問は書き下ろしです。イソップ系の話は、昔から伝わる話を書き直したものです。</p></div>
   <div class="card"><p class="cap">教材のイタリア語はAIが作成し、機械検査とAIの校正を通しています。誤りが残っている可能性があります。</p></div></div></div>`;
 }
 
@@ -4261,7 +4263,7 @@ const LADDER = [
   {
     w: 4500,
     t: "児童文学の名作",
-    d: "Carlo Collodi「Le avventure di Pinocchio」原文、De Amicis「Cuore」。古い語が多いので注つきの版を。",
+    d: "Collodi「Pinocchio」、De Amicis「Cuore」、Vamba「Il giornalino di Gian Burrasca」の原文（アプリでも読めます）。古い語が多いので紙の本なら注つきの版を。",
   },
 ];
 const AUDIO_LINKS = [

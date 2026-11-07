@@ -288,6 +288,24 @@ svg.i{width:1em;height:1em;fill:currentColor;flex:none}
 .hints{margin:8px 0 0;padding-left:20px;font-size:14px;color:var(--muted)}
 textarea.field{resize:vertical;font-size:17px;line-height:1.5}
 
+
+/* ---- reader ---- */
+.sline{display:flex;gap:10px;align-items:flex-start;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:10px 12px}
+.sline .st{flex:1;min-width:0;font-size:19px;font-weight:700;line-height:1.85}
+.sline .ja{display:block;font-size:14px;line-height:1.5;font-weight:600;margin-top:4px;color:var(--muted)}
+.sline .sbtn{flex:none;display:flex;flex-direction:column;gap:6px;align-items:center}
+.sline .chip{min-height:34px;padding:2px 10px;border-bottom-width:2px}
+.sline .hid{color:var(--muted);font-size:15px}
+.wd{background:none;border:0;padding:0 1px;font:inherit;color:inherit;border-radius:4px;cursor:pointer}
+.wd.unk{border-bottom:2px dotted var(--blue)}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:8;background:var(--surface);border-top:3px solid var(--blue);padding:14px max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));box-shadow:0 -8px 24px rgba(0,0,0,.25)}
+.sheet .in{max-width:560px;margin:0 auto}
+.shead{display:flex;align-items:center;gap:10px}
+.shead .a{flex:1;min-width:0}
+.shead b{display:block;font-size:24px;font-weight:900;overflow-wrap:anywhere}
+.shead small{color:var(--muted);font-size:13px}
+.shead .x{font-size:28px;color:var(--muted);background:none;border:0;width:40px;height:40px}
+
 /* ---- settings ---- */
 .set{display:flex;flex-direction:column;gap:8px}
 .set label{font-weight:800}
@@ -319,12 +337,12 @@ select{font:inherit;font-weight:700;padding:10px 12px;border-radius:12px;border:
 </div></nav>
 
 <script>window.KOKUGO=[];</script>
-<script src="js/k1.js?v=20261106070121"></script>
-<script src="js/k2.js?v=20261106070121"></script>
-<script src="js/k3.js?v=20261106070121"></script>
-<script src="js/k4.js?v=20261106070121"></script>
-<script src="js/k5.js?v=20261106070121"></script>
-<script src="js/k6.js?v=20261106070121"></script>
+<script src="js/k1.js?v=20261107103910"></script>
+<script src="js/k2.js?v=20261107103910"></script>
+<script src="js/k3.js?v=20261107103910"></script>
+<script src="js/k4.js?v=20261107103910"></script>
+<script src="js/k5.js?v=20261107103910"></script>
+<script src="js/k6.js?v=20261107103910"></script>
 <script>
 (function(){
 'use strict';
@@ -472,7 +490,7 @@ function lumi(cls){return `<svg class="lumi ${cls||''}" viewBox="0 0 150 120" ar
 
 /* ================= 保存（このブラウザのみ） ================= */
 const KEY='piano-piano-v2';
-function defaults(){return {schema:2,plan:5,k:{},kw:{},kwrite:{},ktest:{},ph:{},verbs:{},done:{},days:{},xp:{},xpTotal:0,goal:20,unlockAll:false,settings:{rate:0.85,voice:''}};}
+function defaults(){return {schema:3,plan:5,w:{},wq:[],wd:{},st:{},tm:{},rwords:0,newDay:10,err:[],lastBak:0,k:{},kw:{},kwrite:{},ktest:{},ph:{},verbs:{},done:{},days:{},xp:{},xpTotal:0,goal:20,unlockAll:false,settings:{rate:0.85,voice:''}};}
 let S=(function(){
   const d=defaults();
   try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);return Object.assign(d,p,{settings:Object.assign(d.settings,p.settings||{})});}}catch(e){}
@@ -510,12 +528,12 @@ const audioNotice=()=>{let ok=true;try{ok='speechSynthesis' in window;}catch(e){
 
 /* ================= 画面 ================= */
 let view='today', vtense='pres', vsel=null, guideSec=0, vfilter='all', vquery='', confirmReset=false, sess=null;
-const TABS=['today','kok','path','verbs','phr','practice','me'];
-const TAB_OF={verbs:'path',practice:'today'};
+const TABS=['today','kok','read','words','path','verbs','phr','practice','me'];
+const TAB_OF={verbs:'path',practice:'today',read:'kok',words:'kok'};
 const cur=()=>sess.ex[sess.i];
 function go(v){view=v;confirmReset=false;render();window.scrollTo(0,0);}
 function render(){
-  const fn={today:vToday,kok:vKok,kmap:vKmap,unit:vUnit,kstep:vKstep,kq:vKq,kqdone:vKqDone,path:vPath,verbs:vVerbs,verb:vVerb,phr:vPhr,pq:vPq,pqdone:vPqDone,practice:vPractice,me:vMe,guide:vGuide,intro:vIntro,ex:vEx,done:vDone,fail:vFail}[view];
+  const fn={read:vRead,words:vWords,story:vStory,err:vErr,credits:vCredits,today:vToday,kok:vKok,kmap:vKmap,unit:vUnit,kstep:vKstep,kq:vKq,kqdone:vKqDone,path:vPath,verbs:vVerbs,verb:vVerb,phr:vPhr,pq:vPq,pqdone:vPqDone,practice:vPractice,me:vMe,guide:vGuide,intro:vIntro,ex:vEx,done:vDone,fail:vFail}[view];
   $('#app').innerHTML=(saveFailed?'<div class="notice" style="margin-top:10px">記録を保存できませんでした。プライベートモードや、端末の空き容量を確認してください。</div>':'')+fn();
   $('#tabs').hidden=!TABS.includes(view);
   const curTab=TAB_OF[view]||view;
@@ -618,7 +636,10 @@ function vMe(){
    <div class="stat"><b>${L.length}<small>/ ${ALL.length}</small></b><small>学んだ動詞</small></div>
    <div class="stat"><b>${mastered}</b><small>定着した動詞</small></div>
    <div class="stat"><b>${KU.filter(unitDone).length}<small>/ ${KU.length}</small></b><small>国語の単元</small></div>
-   <div class="stat"><b>${Object.keys(S.kw).length}</b><small>覚えた単語</small></div>
+   <div class="stat"><b>${Object.keys(S.kw).length}</b><small>国語の単語</small></div>
+   <div class="stat"><b>${Object.keys(S.w).length}<small>/ ${LEXL.length}</small></b><small>学習中の語</small></div>
+   <div class="stat"><b>${S.rwords.toLocaleString()}</b><small>読んだ語数</small></div>
+   <div class="stat"><b>${Math.round(Object.values(S.tm).reduce((a,b)=>a+b,0)/360)/10}<small>時間</small></b><small>累計の学習時間</small></div>
   </div>
   <h3 class="sectitle">1日の目標</h3>
   <div class="seg">${[10,20,30,50].map(g=>`<button class="chip ${S.goal===g?'on':''}" data-act="goal" data-v="${g}">${g} XP</button>`).join('')}</div>
@@ -628,8 +649,9 @@ function vMe(){
    ${voices.length?`<div class="card set"><label for="voice">音声</label><select id="voice">${voices.map(v=>`<option value="${esc(v.name)}" ${(st.voice||voices[0].name)===v.name?'selected':''}>${esc(v.name)}</option>`).join('')}</select></div>`:''}
    <button class="btn full" data-act="say" data-v="Buongiorno, come stai?">音声をテスト</button></div>
   ${moveCard()}
+  ${errCard()}
   <h3 class="sectitle">その他</h3>
-  <div class="stack"><div class="card"><label class="check"><input id="unlock" type="checkbox" ${S.unlockAll?'checked':''}>すべてのレッスンを開放する</label></div>
+  <div class="stack"><button class="btn full" data-act="credits">出典と利用条件</button><div class="card"><label class="check"><input id="unlock" type="checkbox" ${S.unlockAll?'checked':''}>すべてのレッスンを開放する</label></div>
    <div class="card"><p class="cap" style="margin-bottom:12px">学習記録はこのブラウザにだけ保存されています。</p>
    ${confirmReset?`<p style="margin-bottom:10px">すべての記録を消します。元に戻せません。</p><div class="seg"><button class="btn red" data-act="reset">記録を消す</button><button class="btn" data-act="noreset">やめる</button></div>`:`<button class="btn red" data-act="askreset">学習記録をリセット</button>`}</div></div>`;
 }
@@ -2620,7 +2642,8 @@ const SKILL = {
   info: "情報の読み取り",
   vocab: "語句",
 };
-const REVIEW_CAP = 20; // 1回の単語復習の上限。休んだ後に溜まっても、これ以上は出さない
+const WORD_INT = [1, 2, 4, 8, 15, 30, 60, 120, 240, 480]; // 単語の復習間隔（日）。覚えた語ほど間を空け、5,000語でも毎日の負担を抑える
+const REVIEW_CAP = 30; // 1回の単語復習の上限。休んだ後に溜まっても、これ以上は出さない
 // 単語は最初に出た単元のものを正とし、重複しても1語として扱う
 const WM = {};
 KU.forEach((u) =>
@@ -2659,20 +2682,26 @@ function nextStep() {
   return null;
 }
 function gradeWord(it, ok) {
-  const r = S.kw[it] || (S.kw[it] = { box: 0, due: 0, ok: 0, ng: 0 });
+  const store = LEX[it] ? S.w : S.kw;
+  const r = store[it] || (store[it] = { box: 0, due: 0, ok: 0, ng: 0 });
   if (ok) {
     r.ok++;
-    r.box = Math.min(r.box + 1, 6);
+    r.box = Math.min(r.box + 1, WORD_INT.length - 1);
   } else {
     r.ng++;
     r.box = 0;
   }
-  r.due = dayNum() + INTERVALS[r.box];
+  r.due = dayNum() + WORD_INT[r.box];
 }
-const dueWords = () =>
-  Object.keys(S.kw)
-    .filter((w) => WM[w] && S.kw[w].due <= dayNum())
-    .sort((a, b) => S.kw[a].due - S.kw[b].due || S.kw[a].box - S.kw[b].box);
+const dueWords = () => {
+  const d = dayNum();
+  const a = Object.keys(S.kw).filter((w) => WM[w] && S.kw[w].due <= d);
+  const b = Object.keys(S.w).filter((w) => LEX[w] && S.w[w].due <= d);
+  return a.concat(b).sort((x, y) => {
+    const p = wordRec(x), q = wordRec(y);
+    return p.due - q.due || p.box - q.box;
+  });
+};
 const dueVerbs = () => learned().filter((v) => S.verbs[v].due <= dayNum());
 
 /* ---------- 今日 ---------- */
@@ -2687,16 +2716,17 @@ function planTasks(mins) {
   };
   const dw = dueWords().length,
     dv = dueVerbs().length;
-  if (dw)
+  const newLeft = dataState === "ready" ? Math.max(0, S.newDay - newWordsToday()) : 0;
+  if (dw || newLeft)
     add(
       {
-        act: "krev",
+        act: "wstudy",
         ic: I.book,
-        t: "単語の復習",
-        s: `今日の復習 ${Math.min(dw, REVIEW_CAP)}語`,
-        m: 3,
+        t: "単語の学習",
+        s: `復習 ${Math.min(dw, REVIEW_CAP)}語・新しい語 ${newLeft}語`,
+        m: 8,
       },
-      3,
+      8,
     );
   if (dv)
     add(
@@ -2708,6 +2738,19 @@ function planTasks(mins) {
         m: 4,
       },
       4,
+    );
+  const nextS = STIDX.find((s) => !(S.st[s.id] && S.st[s.id].done));
+  if (nextS)
+    add(
+      {
+        act: "story",
+        v: nextS.id,
+        ic: I.star,
+        t: "読書：" + nextS.title,
+        s: `${nextS.kind}・${nextS.n}語`,
+        m: 8,
+      },
+      8,
     );
   let seen = {};
   // 国語の次のステップ→動詞の次のレッスン→表現、の順に時間まで詰める
@@ -2772,15 +2815,16 @@ function planTasks(mins) {
 function vToday() {
   const m = S.plan || 5,
     opts = [
-      [5, "5分だけ"],
+      [5, "5分"],
       [15, "15分"],
-      [30, "じっくり"],
+      [30, "30分"],
+      [60, "1時間"],
     ];
   const next = nextStep();
   const hud = `<div class="hud"><span class="pill fire">${I.fire}<span>${streak()}</span></span>
     <div class="goal"><div class="t"><span>今日のXP</span><span>${xpToday()} / ${S.goal}</span></div><div class="meter"><i style="width:${Math.min(100, Math.round((xpToday() / S.goal) * 100))}%"></i></div></div>
     <span class="pill gem">${I.book}<span>${Object.keys(S.kw).length + learned().length}</span></span></div>`;
-  return `${hud}${audioNotice()}
+  return `${hud}${audioNotice()}${backupNotice()}
   <div class="title"><h2>今日はどのくらい？</h2></div>
   <div class="seg">${opts.map((o) => `<button class="chip ${m === o[0] ? "on" : ""}" data-act="plan" data-v="${o[0]}">${o[1]}</button>`).join("")}</div>
   <h3 class="sectitle">今日のメニュー</h3>
@@ -2797,7 +2841,7 @@ function vToday() {
 /* ---------- 国語：一覧 ---------- */
 function vKok() {
   const done = KU.filter(unitDone).length;
-  return `<div class="title"><h2>国語</h2></div>
+  return `${kseg()}<div class="title"><h2>国語</h2></div>
   <p class="cap" style="margin:-4px 0 12px">日本の国語で学ぶ領域（読む・書く・話す・語彙・文法）を、イタリア語で順に体験します。${KU.length ? `完了 ${done} / ${KU.length} 単元` : ""}</p>
   <button class="btn full" data-act="tab" data-v="kmap">国語の領域との対応を見る</button>
   ${KSTAGES.map((s) => {
@@ -3060,7 +3104,7 @@ function orderFrom(g) {
 }
 function wordItems(list) {
   // 語彙の問題。意味→語、語→意味を交互に。選択肢は同じ単元を優先する
-  const allW = Object.values(WM);
+  const allW = Object.values(WM).concat(LEXL.map((e) => ({ it: e.it, ja: e.ja, u: "lex" })));
   return list.map((w, i) => {
     const dir = i % 2,
       key = dir ? "it" : "ja",
@@ -3083,7 +3127,7 @@ function wordItems(list) {
       correct: w[key],
       why: w.note || "",
       say: w.it,
-      word: w.it,
+      word: w.id || w.it,
     };
   });
 }
@@ -3123,7 +3167,8 @@ function quizForStep() {
 function startReview() {
   const list = dueWords()
     .slice(0, REVIEW_CAP)
-    .map((w) => WM[w]);
+    .map(wordObj)
+    .filter(Boolean);
   if (!list.length) return;
   startQuiz(wordItems(shuffle(list)), { kind: "review", back: "today" });
 }
@@ -3146,7 +3191,9 @@ function startTest(g) {
 }
 const kcur = () => kq.ex[kq.i];
 const kCan = (e) =>
-  e.t === "mc"
+  e.t === "card"
+    ? true
+    : e.t === "mc"
     ? e.sel != null
     : e.t === "order"
       ? e.built.length > 0
@@ -3154,6 +3201,15 @@ const kCan = (e) =>
 function vKq() {
   const e = kcur(),
     n = kq.ex.length;
+  if (e.t === "card") {
+    const w = e.w;
+    return `<div class="ltop"><button class="x" data-act="kquit" aria-label="閉じる">×</button><div class="prog"><i style="width:${Math.max(4, Math.round((kq.i / n) * 100))}%"></i></div></div>
+    <div class="lbody"><div class="ask">新しい語</div>${bubble(`<span style="font-size:26px">${esc(w.it)}</span>`, esc(w.note || ""), w.it)}
+    <p style="font-size:20px;font-weight:800;margin:8px 0 14px">${esc(w.ja)}</p>
+    ${w.ex ? `<div class="exline"><div class="a"><b>${esc(w.ex)}</b><small>${esc(w.exJa)}</small></div><button class="spk" data-act="say" data-v="${esc(w.ex)}" aria-label="例文を再生">${I.spk}</button></div>` : ""}
+    <div style="margin-top:14px"><button class="btn sm quiet" data-act="errnew" data-v="語：${esc(w.it)}">誤りを報告</button></div></div>
+    <div class="abar"><div class="in"><button class="btn full green" data-act="kcardok">確かめる</button></div></div>`;
+  }
   let body = "";
   if (e.t === "mc") {
     body = `${e.skill ? `<span class="tag" style="margin-bottom:8px;display:inline-block">${SKILL[e.skill] || ""}</span>` : ""}<div class="ask">${esc(e.q)}</div><div class="opts">${e.o
@@ -3198,6 +3254,7 @@ function vKq() {
 }
 function kCheck() {
   const e = kcur();
+  if (e.t === "card") return ACT.kcardok();
   if (e.state !== "idle" || !kCan(e)) return;
   let ok = false;
   if (e.t === "mc") ok = e.o[e.sel] === e.correct;
@@ -3261,6 +3318,12 @@ function kFinish() {
         if (!S.kw[w[0]]) S.kw[w[0]] = { box: 0, due: dayNum(), ok: 0, ng: 0 };
       });
   }
+  if (kq.kind === "story") {
+    const prev = S.st[kq.sid];
+    if (!prev || !prev.done) S.rwords += kq.n;
+    S.st[kq.sid] = { done: dayNum(), taps: kq.taps };
+    kq.xp = 8;
+  }
   if (kq.kind === "test") S.ktest[kq.g] = Math.max(S.ktest[kq.g] || 0, kq.acc);
   addXp(kq.xp);
   save();
@@ -3274,8 +3337,10 @@ function vKqDone() {
   const title =
     kq.kind === "test"
       ? `段階${kq.g}の確認テスト`
-      : kq.kind === "review"
-        ? "復習完了！"
+      : kq.kind === "review" || kq.kind === "wordstudy"
+        ? "学習完了！"
+        : kq.kind === "story"
+        ? "読み終えました！"
         : "よくできました！";
   return `<div class="center">${lumi()}<div class="big">${title}</div>
    <div class="results"><div class="rc xp"><div class="h">XP</div><div class="v">${I.bolt}${kq.xp}</div></div>
@@ -3294,7 +3359,7 @@ function writePrompt(u) {
 
 /* ---------- 記録の移動 ---------- */
 const NUM_MAPS = ["days", "xp"],
-  OBJ_KEYS = ["verbs", "done", "ph", "k", "kw", "kwrite", "ktest"];
+  OBJ_KEYS = ["verbs", "done", "ph", "k", "kw", "w", "st", "kwrite", "ktest", "tm", "wd"];
 function exportCode() {
   return "PP1:" + btoa(unescape(encodeURIComponent(JSON.stringify(S))));
 }
@@ -3316,7 +3381,7 @@ function parseImport(text) {
       throw new Error("記録の形式が正しくありません。");
     if (v) d[k] = v;
   });
-  ["xpTotal", "goal", "plan"].forEach((k) => {
+  ["xpTotal", "goal", "plan", "rwords", "newDay", "lastBak"].forEach((k) => {
     if (typeof p[k] === "number" && isFinite(p[k])) d[k] = p[k];
   });
   d.unlockAll = p.unlockAll === true;
@@ -3327,14 +3392,14 @@ function parseImport(text) {
       d.settings.voice = p.settings.voice;
   }
   // 動詞の記録の中身が数値でないものは捨てる（壊れたデータで画面が崩れないように）
-  ["verbs", "kw"].forEach((k) => {
+  ["verbs", "kw", "w"].forEach((k) => {
     Object.keys(d[k]).forEach((x) => {
       const r = d[k][x];
       if (!r || typeof r.box !== "number" || typeof r.due !== "number")
         delete d[k][x];
     });
   });
-  ["xp", "days", "ktest"].forEach((k) => {
+  ["xp", "days", "ktest", "tm", "wd"].forEach((k) => {
     Object.keys(d[k]).forEach((x) => {
       if (typeof d[k][x] !== "number" || !isFinite(d[k][x])) delete d[k][x];
     });
@@ -3343,6 +3408,9 @@ function parseImport(text) {
     const r = d.done[x];
     if (!r || typeof r !== "object" || typeof r.best !== "number" || typeof r.n !== "number") delete d.done[x];
   });
+  if (Array.isArray(p.wq)) d.wq = p.wq.filter((x) => typeof x === "string");
+  if (Array.isArray(p.err)) d.err = p.err.filter((x) => x && typeof x.where === "string" && typeof x.text === "string").map((x) => ({ where: x.where, text: x.text, day: +x.day || 0 }));
+  Object.keys(d.st).forEach((x) => { const r = d.st[x]; if (!r || typeof r.done !== "number") delete d.st[x]; });
   Object.keys(d.kwrite).forEach((x) => {
     if (typeof d.kwrite[x] !== "string") delete d.kwrite[x];
   });
@@ -3351,10 +3419,10 @@ function parseImport(text) {
 function moveCard() {
   return `<h3 class="sectitle">記録の移動（Macとスマホの間）</h3><div class="stack">
   <div class="card"><p class="cap" style="margin-bottom:10px">書き出したコードを、別の端末の「読み込み」に貼り付けます。自動では同期しません。</p>
-   <button class="btn full" data-act="kexport">書き出してコピー</button>
+   <div class="stack"><button class="btn full" data-act="kexport">書き出してコピー</button><button class="btn full" data-act="kfile">ファイルに保存</button></div>
    ${moveOut ? `<textarea id="kout" class="field" rows="3" readonly style="font-size:12px;margin-top:10px" aria-label="記録のコード">${esc(moveOut)}</textarea>` : ""}</div>
-  <div class="card"><textarea id="kin" class="field" rows="3" style="font-size:12px" placeholder="ここにコードを貼り付け" aria-label="読み込むコード"></textarea>
-   <button class="btn full" style="margin-top:10px" data-act="kimport">読み込む（今の記録と置き換え）</button>
+  <div class="card"><textarea id="kin" class="field" rows="3" style="font-size:12px" placeholder="ここにコードを貼り付け（下からファイルも選べます）" aria-label="読み込むコード"></textarea>
+   <label class="check" style="margin-top:10px;font-weight:600;font-size:14px">ファイルを選ぶ <input id="kfilein" type="file" accept=".txt,text/plain" style="width:auto;height:auto"></label><button class="btn full" style="margin-top:10px" data-act="kimport">読み込む（今の記録と置き換え）</button>
    <p class="cap" style="margin-top:8px">読み込む前の記録は、1回分だけこの端末に控えます。</p>
    ${S_hasBackup() ? '<button class="btn full quiet" data-act="krestore">控えに戻す</button>' : ""}</div>
   ${moveMsg ? `<div class="notice" ${moveErr ? 'style="background:var(--red-s)"' : ""}>${esc(moveMsg)}</div>` : ""}</div>`;
@@ -3608,6 +3676,539 @@ document.addEventListener("input", (e) => {
     save();
   }
 });
+/* ================= 語彙データと読書 ================= */
+// 全語の索引は起動時に読み込む（復習から語が消えないように）。物語の本文は開くときに読み込む
+const LEX = {},
+  LEXL = [],
+  POS_LABEL = {
+    m: "男性名詞",
+    f: "女性名詞",
+    mf: "名詞",
+    mi: "男性名詞",
+    fi: "女性名詞",
+    mp: "男性名詞（複数）",
+    fp: "女性名詞（複数）",
+    v: "動詞",
+    a: "形容詞",
+    ai: "形容詞",
+    r: "",
+  };
+let STIDX = [],
+  dataState = "loading",
+  story = null,
+  sopen = null,
+  wquery = "",
+  errDraft = null;
+async function loadData() {
+  try {
+    const m = await (await fetch("data/manifest.json")).json();
+    const [lex, idx] = await Promise.all([
+      fetch("data/" + m.lex).then((r) => r.json()),
+      fetch("data/" + m.index).then((r) => r.json()),
+    ]);
+    lex.forEach((e) => {
+      const o = {
+        id: e[0],
+        it: e[1],
+        pos: e[2],
+        ja: e[3],
+        ex: e[4],
+        exJa: e[5],
+      };
+      LEX[e[0]] = o;
+      LEXL.push(o);
+    });
+    STIDX = idx;
+    dataState = "ready";
+    migrateWords();
+    spreadBacklog();
+  } catch (e) {
+    dataState = "error";
+  }
+  if (["today", "read", "words", "me"].includes(view)) render();
+}
+// 旧版の単語記録（S.kw）のうち、語彙表にあるものを新しい記録（S.w）へ移す。同じ綴りでも原形で対応させる
+function migrateWords() {
+  let changed = false;
+  Object.keys(S.kw).forEach((it) => {
+    const e = LEX[it];
+    if (!e) return;
+    if (!S.w[it]) S.w[it] = S.kw[it];
+    delete S.kw[it];
+    changed = true;
+  });
+  Object.keys(S.verbs).forEach((v) => {
+    const b = v.replace(/rsi$/, "re");
+    if (LEX[b] && !S.w[b]) {
+      S.w[b] = { box: 0, due: dayNum(), ok: 0, ng: 0 };
+      changed = true;
+    }
+  });
+  if (changed) save();
+}
+// 長く休んだ後に復習が溜まりすぎないよう、上限の3倍を超えた分を先の日へ散らす
+function spreadBacklog() {
+  const d = dayNum(),
+    due = Object.keys(S.w)
+      .filter((w) => S.w[w].due <= d)
+      .sort((a, b) => S.w[a].box - S.w[b].box);
+  const keep = REVIEW_CAP * 3;
+  if (due.length <= keep) return;
+  due.slice(keep).forEach((w, i) => {
+    S.w[w].due = d + 1 + Math.floor(i / REVIEW_CAP);
+  });
+  save();
+}
+const wordRec = (it) => S.w[it] || S.kw[it];
+const isKnown = (id) => !!S.w[id];
+function wordObj(it) {
+  const e = LEX[it];
+  if (e)
+    return {
+      it: e.it,
+      id: e.id,
+      ja: e.ja,
+      note: POS_LABEL[e.pos] || "",
+      u: "lex",
+      ex: e.ex,
+      exJa: e.exJa,
+    };
+  const w = WM[it];
+  return w ? Object.assign({ id: it }, w) : null;
+}
+function newWordsToday() {
+  return S.wd[dayNum()] || 0;
+}
+function nextNewWords(n) {
+  const out = [],
+    seen = {};
+  S.wq.forEach((id) => {
+    if (out.length < n && LEX[id] && !S.w[id] && !seen[id]) {
+      seen[id] = 1;
+      out.push(LEX[id]);
+    }
+  });
+  for (const e of LEXL) {
+    if (out.length >= n) break;
+    if (!S.w[e.id] && !seen[e.id] && e.pos !== "r") {
+      seen[e.id] = 1;
+      out.push(e);
+    }
+  }
+  return out;
+}
+function startWordStudy() {
+  const due = dueWords().slice(0, REVIEW_CAP),
+    news = nextNewWords(Math.max(0, S.newDay - newWordsToday()));
+  const objs = new Set(due);
+  const newItems = news.flatMap((e) => {
+    const o = wordObj(e.id);
+    return [{ t: "card", word: e.id, w: o }].concat(
+      wordItems([o]).map((x) => Object.assign(x, { isNew: true })),
+    );
+  });
+  const rev = wordItems(shuffle(due.map(wordObj).filter(Boolean)));
+  const items = newItems.concat(rev);
+  if (!items.length) return;
+  startQuiz(items, { kind: "wordstudy", back: "words", nNew: news.length });
+}
+
+/* ---------- 画面の切替チップ ---------- */
+function kseg() {
+  return `<div class="seg" style="padding-top:10px"><button class="chip ${view === "kok" ? "on" : ""}" data-act="tab" data-v="kok">コース</button><button class="chip ${view === "read" ? "on" : ""}" data-act="tab" data-v="read">読書</button><button class="chip ${view === "words" ? "on" : ""}" data-act="tab" data-v="words">単語</button></div>`;
+}
+function dataNotice() {
+  if (dataState === "loading")
+    return '<p class="cap" style="padding:20px;text-align:center">読み込んでいます…</p>';
+  if (dataState === "error")
+    return '<div class="notice" style="margin-top:12px">教材を読み込めませんでした。通信を確かめて、開き直してください。</div>';
+  return "";
+}
+
+/* ---------- 読書：一覧 ---------- */
+function knownRatio(s) {
+  if (!s.w.length) return 0;
+  return Math.round((s.w.filter(isKnown).length / s.w.length) * 100);
+}
+function vRead() {
+  const n = dataNotice();
+  if (n) return kseg() + n;
+  const total = STIDX.reduce((a, s) => a + s.n, 0),
+    done = STIDX.filter((s) => S.st[s.id] && S.st[s.id].done).length;
+  const lvs = [...new Set(STIDX.map((s) => s.lv))].sort((a, b) => a - b);
+  return `${kseg()}<div class="title"><h2>読書</h2></div>
+  <p class="cap" style="margin:-4px 0 12px">読んだ語数 ${S.rwords.toLocaleString()} 語・${done} / ${STIDX.length} 編。全部で ${total.toLocaleString()} 語あります。</p>
+  <div class="tip">単語をタップすると意味が出ます。わからない語があっても、まず最後まで読みましょう。％は、すでに学んだ語の割合です。</div>
+  <button class="btn full" style="margin-top:12px" data-act="savedata">オフライン用にすべて保存</button>${dataMsg ? `<p class="cap" style="margin-top:6px">${esc(dataMsg)}</p>` : ""}
+  ${lvs
+    .map(
+      (l) =>
+        `<h3 class="sectitle">レベル ${l}</h3><div class="stack">${STIDX.filter(
+          (s) => s.lv === l,
+        )
+          .map((s) => {
+            const st = S.st[s.id];
+            return `<button class="task" data-act="story" data-v="${esc(s.id)}"><span class="tic ${st && st.done ? "ok" : ""}">${st && st.done ? I.check : I.book}</span><span class="a"><b>${esc(s.title)}</b><small>${esc(s.kind)}・${s.n}語</small></span><span class="min">${knownRatio(s)}%</span></button>`;
+          })
+          .join("")}</div>`,
+    )
+    .join("")}`;
+}
+async function openStory(id) {
+  const s = STIDX.find((x) => x.id === id);
+  if (!s) return;
+  sopen = {
+    id,
+    show: {},
+    hide: false,
+    sheet: null,
+    loading: true,
+    err: false,
+    taps: 0,
+  };
+  go("story");
+  try {
+    const d = await (await fetch("data/" + s.f)).json();
+    if (sopen && sopen.id === id) {
+      sopen.data = d;
+      sopen.loading = false;
+    }
+  } catch (e) {
+    if (sopen && sopen.id === id) {
+      sopen.err = true;
+      sopen.loading = false;
+    }
+  }
+  if (view === "story") render();
+}
+function storyLine(l, i) {
+  const shown = sopen.show[i],
+    hide = sopen.hide && !shown;
+  let html = "",
+    pos = 0;
+  if (hide) html = `<span class="hid">文 ${i + 1}（タップで表示）</span>`;
+  else {
+    l.t.forEach((t) => {
+      html += esc(l.it.slice(pos, t[0]));
+      const w = l.it.slice(t[0], t[1]);
+      if (t[2] === 0) html += esc(w);
+      else {
+        const id = t[2],
+          unk = !String(id).startsWith("g:") && !isKnown(id);
+        html += `<button class="wd ${unk ? "unk" : ""}" data-act="wd" data-v="${esc(id)}">${esc(w)}</button>`;
+      }
+      pos = t[1];
+    });
+    html += esc(l.it.slice(pos));
+  }
+  return `<div class="sline"><div class="st">${html}${shown ? `<span class="ja">${esc(l.ja)}</span>` : ""}</div>
+   <div class="sbtn"><button class="spk" data-act="say" data-v="${esc(l.it)}" aria-label="文を再生">${I.spk}</button><button class="chip" data-act="sline" data-v="${i}">訳</button></div></div>`;
+}
+function sheetHtml() {
+  const id = sopen.sheet;
+  if (!id) return "";
+  let title,
+    sub,
+    extra = "",
+    add = "";
+  if (String(id).startsWith("g:")) {
+    const k = id.slice(2);
+    title = k;
+    sub = sopen.data.g[k] || "";
+    extra = "この話だけの語句です。";
+  } else {
+    const e = LEX[id];
+    title = e ? e.it : id;
+    sub = e ? e.ja : "";
+    extra = e ? POS_LABEL[e.pos] : "";
+    add =
+      e && !S.w[id]
+        ? S.wq.includes(id)
+          ? '<span class="cap">単語の学習に追加しました</span>'
+          : `<button class="btn sm blue" data-act="wadd" data-v="${esc(id)}">単語の学習に追加</button>`
+        : '<span class="cap">学習中の語です</span>';
+  }
+  return `<div class="sheet" role="dialog" aria-label="語の意味"><div class="in"><div class="shead"><div class="a"><b>${esc(title)}</b><small>${esc(extra || "")}</small></div><button class="spk" data-act="say" data-v="${esc(title)}" aria-label="再生">${I.spk}</button><button class="x" data-act="wclose" aria-label="閉じる">×</button></div><p class="kb">${esc(sub)}</p><div class="seg" style="margin-top:10px;align-items:center">${add}<button class="btn sm quiet" data-act="errnew" data-v="語：${esc(title)}">誤りを報告</button></div></div></div>`;
+}
+function vStory() {
+  const s = STIDX.find((x) => x.id === sopen.id),
+    top = `<div class="ltop"><button class="x" data-act="tab" data-v="read" aria-label="戻る">${I.back}</button><h2 style="flex:1;font-size:19px">${esc(s ? s.title : "")}</h2></div>`;
+  if (sopen.loading)
+    return (
+      top +
+      '<p class="cap" style="padding:30px;text-align:center">読み込んでいます…</p>'
+    );
+  if (sopen.err || !sopen.data)
+    return (
+      top +
+      '<div class="notice">読み込めませんでした。通信を確かめて、開き直してください。</div>'
+    );
+  const d = sopen.data;
+  return `${top}<div class="lbody" style="padding-bottom:170px">
+  <p class="cap">${esc(d.kind)}・${d.n}語・学んだ語 ${knownRatio(s)}%</p>
+  ${d.note ? `<div class="tip" style="margin-top:8px">${esc(d.note)}</div>` : ""}
+  <div class="seg" style="margin:12px 0"><button class="btn sm blue" data-act="sayst">全部聞く</button><button class="btn sm" data-act="shide">${sopen.hide ? "文字を出す" : "文字を隠す"}</button><button class="btn sm quiet" data-act="errnew" data-v="話：${esc(d.title)}">誤りを報告</button></div>
+  <div class="stack">${d.lines.map(storyLine).join("")}</div>
+  </div><div class="bottom"><div class="in"><button class="btn green full" data-act="stq">読み終えた：問いに答える</button></div></div>${sheetHtml()}`;
+}
+
+/* ---------- 単語の学習 ---------- */
+function wordRow(e) {
+  const r = S.w[e.id];
+  return `<div class="line"><div class="lt"><b>${esc(e.it)}</b><span class="ja">${esc(e.ja)}</span><small>${esc(POS_LABEL[e.pos] || "")}${r ? `・次の復習まで ${Math.max(0, r.due - dayNum())} 日` : ""}</small></div><button class="spk" data-act="say" data-v="${esc(e.it)}" aria-label="再生">${I.spk}</button></div>`;
+}
+function wordSearch() {
+  const q = norm(wquery),
+    qj = wquery.trim();
+  if (!qj) return "";
+  const hit = LEXL.filter(
+    (e) => (q && norm(e.it).includes(q)) || e.ja.includes(qj),
+  ).slice(0, 40);
+  return hit.length
+    ? hit.map(wordRow).join("")
+    : '<p class="cap" style="text-align:center;padding:16px">見つかりませんでした</p>';
+}
+function vWords() {
+  const n = dataNotice();
+  if (n) return kseg() + n;
+  const learned = Object.keys(S.w).length,
+    dw = dueWords().length,
+    left = Math.max(0, S.newDay - newWordsToday());
+  const mastered = Object.values(S.w).filter((r) => r.box >= 4).length;
+  return `${kseg()}<div class="title"><h2>単語 ${LEXL.length.toLocaleString()}語</h2></div>
+  <div class="grid2"><div class="stat"><b>${learned}</b><small>学習中の語</small></div><div class="stat"><b>${mastered}</b><small>定着してきた語</small></div></div>
+  <button class="btn green full" style="margin-top:14px" data-act="wstudy" ${dw || left ? "" : "disabled"}>学習する（復習 ${Math.min(dw, REVIEW_CAP)}語・新しい語 ${left}語）</button>
+  <h3 class="sectitle">1日の新しい語</h3>
+  <div class="seg">${[5, 10, 20, 30].map((x) => `<button class="chip ${S.newDay === x ? "on" : ""}" data-act="newday" data-v="${x}">${x}語</button>`).join("")}</div>
+  <p class="cap" style="margin-top:8px">語は使用頻度の高い順に出します。5,000語を目指すなら、1日20語で8か月ほどです。無理のない数を選んでください。</p>
+  <h3 class="sectitle">語を調べる</h3>
+  <input id="wq" class="search" type="search" placeholder="検索（例：casa、家）" value="${esc(wquery)}" aria-label="語を検索">
+  <div class="stack" id="wlist" style="margin-top:10px">${wordSearch()}</div>`;
+}
+
+/* ---------- 誤り報告・出典 ---------- */
+function vErr() {
+  return `<div class="ltop"><button class="x" data-act="errcancel" aria-label="戻る">${I.back}</button><h2 style="flex:1;font-size:20px">誤りを報告</h2></div>
+  <div class="lbody" style="padding-bottom:40px"><div class="stack"><p class="cap">対象：${esc(errDraft.where)}</p>
+  <textarea id="errtext" class="field" rows="4" placeholder="おかしいと感じた点を書いてください" aria-label="報告の内容">${esc(errDraft.text || "")}</textarea>
+  <button class="btn green full" data-act="errsave">控える</button><p class="cap">この端末に控えます。「記録」タブでまとめてコピーし、家庭教師やClaudeに確認してもらえます。</p></div></div>`;
+}
+function errCard() {
+  if (!S.err.length) return "";
+  return `<h3 class="sectitle">誤りの報告（${S.err.length}件）</h3><div class="stack"><div class="card"><p class="cap" style="max-height:140px;overflow:auto;white-space:pre-wrap">${esc(S.err.map((e) => "・" + e.where + "：" + e.text).join("\n"))}</p><button class="btn full" style="margin-top:10px" data-act="errcopy">まとめてコピー</button><button class="btn full quiet" data-act="errclear">すべて消す</button></div></div>`;
+}
+function vCredits() {
+  return `<div class="ltop"><button class="x" data-act="tab" data-v="me" aria-label="戻る">${I.back}</button><h2 style="flex:1">出典と利用条件</h2></div>
+  <div class="lbody" style="padding-bottom:40px"><div class="stack"><div class="card"><p style="font-weight:800;margin-bottom:6px">語彙の選定</p><p class="kb">語の頻度順に <a href="https://github.com/rspeer/wordfreq">wordfreq</a> のデータ（CC BY-SA 4.0）を参考にしました。これをもとにした語彙表も CC BY-SA 4.0 で扱います。意味の訳はこのアプリの書き下ろしです。</p></div>
+  <div class="card"><p style="font-weight:800;margin-bottom:6px">活用</p><p class="kb">動詞の活用形の生成と照合に <a href="https://github.com/bretttolbert/verbecc">verbecc</a> を使いました。</p></div>
+  <div class="card"><p style="font-weight:800;margin-bottom:6px">読み物と国語コース</p><p class="kb">AIによる書き下ろしです。『ピノッキオ』はCarlo Collodi（1883年、著作権切れ）の原作をやさしく書き直したものです。イソップ系の話は、昔から伝わる話を書き直したものです。</p></div>
+  <div class="card"><p class="cap">教材のイタリア語はAIが作成し、機械検査とAIの校正を通しています。誤りが残っている可能性があります。</p></div></div></div>`;
+}
+
+/* ---------- 記録の保護 ---------- */
+function backupNotice() {
+  const has = Object.keys(S.w).length + Object.keys(S.verbs).length >= 20;
+  const age = dayNum() - (S.lastBak || 0);
+  if (!has || age < 30) return "";
+  return `<div class="notice" style="margin-top:12px">${S.lastBak ? "前回のバックアップから30日以上経ちました。" : "学習記録がたまってきました。"}<button class="btn sm" style="margin-left:8px" data-act="kfile">ファイルに保存</button></div>`;
+}
+function exportFile() {
+  try {
+    const b = new Blob([exportCode()], { type: "text/plain" }),
+      u = URL.createObjectURL(b),
+      a = document.createElement("a");
+    a.href = u;
+    a.download =
+      "piano-piano-" + new Date().toISOString().slice(0, 10) + ".txt";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(u), 2000);
+    S.lastBak = dayNum();
+    save();
+    moveMsg = "ファイルに保存しました。";
+    moveErr = false;
+  } catch (e) {
+    moveMsg = "ファイルに保存できませんでした。コードをコピーしてください。";
+    moveErr = true;
+  }
+  render();
+}
+function tickTime() {
+  // 画面を見ている時間だけ数える（30秒ごと）。累計は「記録」に出す
+  try {
+    if (document.visibilityState !== "visible") return;
+  } catch (e) {
+    return;
+  }
+  const d = dayNum();
+  S.tm[d] = (S.tm[d] || 0) + 30;
+  save();
+}
+try {
+  if (navigator.storage && navigator.storage.persist)
+    navigator.storage.persist().catch(() => {});
+} catch (e) {}
+try {
+  window.setInterval && window.setInterval(tickTime, 30000);
+} catch (e) {}
+
+Object.assign(ACT, {
+  story(v) {
+    openStory(v);
+  },
+  sline(v) {
+    sopen.show[v] = !sopen.show[v];
+    render();
+  },
+  shide() {
+    sopen.hide = !sopen.hide;
+    sopen.show = {};
+    render();
+  },
+  sayst() {
+    if (sopen.data) sayAll(sopen.data.lines.map((l) => l.it));
+  },
+  wd(v) {
+    if (!sopen) return;
+    sopen.sheet = v;
+    sopen.taps++;
+    render();
+    if (!String(v).startsWith("g:") && LEX[v]) say(LEX[v].it);
+    else if (String(v).startsWith("g:")) say(String(v).slice(2));
+  },
+  wclose() {
+    sopen.sheet = null;
+    render();
+  },
+  wadd(v) {
+    if (!S.wq.includes(v)) S.wq.push(v);
+    save();
+    render();
+  },
+  stq() {
+    const d = sopen.data;
+    if (!d) return;
+    const items = d.q.map((q) => ({
+      t: "mc",
+      q: q.s,
+      o: q.o.slice(),
+      correct: q.o[0],
+      why: q.why,
+      skill: q.skill,
+      say: "",
+    }));
+    startQuiz(items, {
+      kind: "story",
+      sid: d.id,
+      n: d.n,
+      taps: sopen.taps,
+      back: "read",
+    });
+  },
+  wstudy() {
+    startWordStudy();
+  },
+  newday(v) {
+    S.newDay = +v;
+    save();
+    render();
+  },
+  kcardok() {
+    const e = kcur();
+    e.state = "right";
+    if (!S.w[e.word]) {
+      S.w[e.word] = { box: 0, due: dayNum(), ok: 0, ng: 0 };
+      const d = dayNum();
+      S.wd[d] = (S.wd[d] || 0) + 1;
+      S.wq = S.wq.filter((x) => x !== e.word);
+      save();
+    }
+    kCont();
+  },
+  savedata() {
+    (async () => {
+      try {
+        await Promise.all(STIDX.map((s) => fetch("data/" + s.f)));
+        moveMsg = "";
+        dataMsg = "保存しました。";
+      } catch (e) {
+        dataMsg = "保存できませんでした。通信を確かめてください。";
+      }
+      render();
+    })();
+  },
+  errnew(v) {
+    errDraft = { where: v, text: "", from: view };
+    view = "err";
+    render();
+  },
+  errcancel() {
+    const f = errDraft.from;
+    errDraft = null;
+    view = f;
+    render();
+  },
+  errsave() {
+    const a = $("#errtext"),
+      t = ((a && a.value) || "").trim();
+    if (t) S.err.push({ where: errDraft.where, text: t, day: dayNum() });
+    save();
+    const f = errDraft.from;
+    errDraft = null;
+    view = f;
+    render();
+  },
+  errcopy() {
+    const t = S.err.map((e) => "・" + e.where + "：" + e.text).join("\n");
+    try {
+      navigator.clipboard.writeText(t).then(
+        () => {
+          moveMsg = "コピーしました。";
+          moveErr = false;
+          render();
+        },
+        () => {},
+      );
+    } catch (e) {}
+  },
+  errclear() {
+    S.err = [];
+    save();
+    render();
+  },
+  kfile() {
+    exportFile();
+  },
+  kfilein() {},
+  credits() {
+    go("credits");
+  },
+});
+let dataMsg = "";
+document.addEventListener("input", (e) => {
+  if (e.target.id === "wq") {
+    wquery = e.target.value;
+    const l = $("#wlist");
+    if (l) l.innerHTML = wordSearch();
+  }
+});
+document.addEventListener("change", (e) => {
+  if (e.target.id === "kfilein" && e.target.files && e.target.files[0]) {
+    const r = new FileReader();
+    r.onload = () => {
+      const a = $("#kin");
+      if (a) a.value = String(r.result || "");
+      moveMsg = "ファイルを読みました。「読み込む」を押すと置き換えます。";
+      moveErr = false;
+      const v = a ? a.value : "";
+      render();
+      const b = $("#kin");
+      if (b) b.value = v;
+    };
+    r.readAsText(e.target.files[0]);
+  }
+});
 function matchTry(e){
   if(e.sl==null||e.sr==null){render();return;}
   const l=e.L[e.sl],r=e.R[e.sr];
@@ -3647,6 +4248,7 @@ document.addEventListener('change',e=>{
   if(t.id==='unlock'){S.unlockAll=t.checked;save();}
 });
 
+loadData();
 render();
 })();
 </script>

@@ -337,12 +337,13 @@ select{font:inherit;font-weight:700;padding:10px 12px;border-radius:12px;border:
 </div></nav>
 
 <script>window.KOKUGO=[];</script>
-<script src="js/k1.js?v=20261107104026"></script>
-<script src="js/k2.js?v=20261107104026"></script>
-<script src="js/k3.js?v=20261107104026"></script>
-<script src="js/k4.js?v=20261107104026"></script>
-<script src="js/k5.js?v=20261107104026"></script>
-<script src="js/k6.js?v=20261107104026"></script>
+<script src="js/k1.js?v=20261107120343"></script>
+<script src="js/k2.js?v=20261107120343"></script>
+<script src="js/k3.js?v=20261107120343"></script>
+<script src="js/k4.js?v=20261107120343"></script>
+<script src="js/k5.js?v=20261107120343"></script>
+<script src="js/k6.js?v=20261107120343"></script>
+<script src="js/k7.js?v=20261107120343"></script>
 <script>
 (function(){
 'use strict';
@@ -490,7 +491,7 @@ function lumi(cls){return `<svg class="lumi ${cls||''}" viewBox="0 0 150 120" ar
 
 /* ================= 保存（このブラウザのみ） ================= */
 const KEY='piano-piano-v2';
-function defaults(){return {schema:3,plan:5,w:{},wq:[],wd:{},st:{},tm:{},rwords:0,newDay:10,err:[],lastBak:0,k:{},kw:{},kwrite:{},ktest:{},ph:{},verbs:{},done:{},days:{},xp:{},xpTotal:0,goal:20,unlockAll:false,settings:{rate:0.85,voice:''}};}
+function defaults(){return {schema:4,vt:[],inv:[],books:[],extMin:0,plan:5,w:{},wq:[],wd:{},st:{},tm:{},rwords:0,newDay:10,err:[],lastBak:0,k:{},kw:{},kwrite:{},ktest:{},ph:{},verbs:{},done:{},days:{},xp:{},xpTotal:0,goal:20,unlockAll:false,settings:{rate:0.85,voice:''}};}
 let S=(function(){
   const d=defaults();
   try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);return Object.assign(d,p,{settings:Object.assign(d.settings,p.settings||{})});}}catch(e){}
@@ -528,12 +529,12 @@ const audioNotice=()=>{let ok=true;try{ok='speechSynthesis' in window;}catch(e){
 
 /* ================= 画面 ================= */
 let view='today', vtense='pres', vsel=null, guideSec=0, vfilter='all', vquery='', confirmReset=false, sess=null;
-const TABS=['today','kok','read','words','path','verbs','phr','practice','me'];
-const TAB_OF={verbs:'path',practice:'today',read:'kok',words:'kok'};
+const TABS=['goal','today','kok','read','words','path','verbs','phr','practice','me'];
+const TAB_OF={goal:'me',verbs:'path',practice:'today',read:'kok',words:'kok'};
 const cur=()=>sess.ex[sess.i];
 function go(v){view=v;confirmReset=false;render();window.scrollTo(0,0);}
 function render(){
-  const fn={read:vRead,words:vWords,story:vStory,err:vErr,credits:vCredits,today:vToday,kok:vKok,kmap:vKmap,unit:vUnit,kstep:vKstep,kq:vKq,kqdone:vKqDone,path:vPath,verbs:vVerbs,verb:vVerb,phr:vPhr,pq:vPq,pqdone:vPqDone,practice:vPractice,me:vMe,guide:vGuide,intro:vIntro,ex:vEx,done:vDone,fail:vFail}[view];
+  const fn={goal:vGoal,vt:vVt,read:vRead,words:vWords,story:vStory,err:vErr,credits:vCredits,today:vToday,kok:vKok,kmap:vKmap,unit:vUnit,kstep:vKstep,kq:vKq,kqdone:vKqDone,path:vPath,verbs:vVerbs,verb:vVerb,phr:vPhr,pq:vPq,pqdone:vPqDone,practice:vPractice,me:vMe,guide:vGuide,intro:vIntro,ex:vEx,done:vDone,fail:vFail}[view];
   $('#app').innerHTML=(saveFailed?'<div class="notice" style="margin-top:10px">記録を保存できませんでした。プライベートモードや、端末の空き容量を確認してください。</div>':'')+fn();
   $('#tabs').hidden=!TABS.includes(view);
   const curTab=TAB_OF[view]||view;
@@ -651,7 +652,7 @@ function vMe(){
   ${moveCard()}
   ${errCard()}
   <h3 class="sectitle">その他</h3>
-  <div class="stack"><button class="btn full" data-act="credits">出典と利用条件</button><div class="card"><label class="check"><input id="unlock" type="checkbox" ${S.unlockAll?'checked':''}>すべてのレッスンを開放する</label></div>
+  <div class="stack"><button class="btn full blue" data-act="tab" data-v="goal">到達の状況</button><button class="btn full" data-act="credits">出典と利用条件</button><div class="card"><label class="check"><input id="unlock" type="checkbox" ${S.unlockAll?'checked':''}>すべてのレッスンを開放する</label></div>
    <div class="card"><p class="cap" style="margin-bottom:12px">学習記録はこのブラウザにだけ保存されています。</p>
    ${confirmReset?`<p style="margin-bottom:10px">すべての記録を消します。元に戻せません。</p><div class="seg"><button class="btn red" data-act="reset">記録を消す</button><button class="btn" data-act="noreset">やめる</button></div>`:`<button class="btn red" data-act="askreset">学習記録をリセット</button>`}</div></div>`;
 }
@@ -3381,7 +3382,7 @@ function parseImport(text) {
       throw new Error("記録の形式が正しくありません。");
     if (v) d[k] = v;
   });
-  ["xpTotal", "goal", "plan", "rwords", "newDay", "lastBak"].forEach((k) => {
+  ["xpTotal", "goal", "plan", "rwords", "newDay", "lastBak", "extMin"].forEach((k) => {
     if (typeof p[k] === "number" && isFinite(p[k])) d[k] = p[k];
   });
   d.unlockAll = p.unlockAll === true;
@@ -3408,6 +3409,9 @@ function parseImport(text) {
     const r = d.done[x];
     if (!r || typeof r !== "object" || typeof r.best !== "number" || typeof r.n !== "number") delete d.done[x];
   });
+  if (Array.isArray(p.vt)) d.vt = p.vt.filter((x) => x && typeof x.est === "number" && typeof x.day === "number").map((x) => ({ day: x.day, est: x.est, margin: +x.margin || 0 }));
+  if (Array.isArray(p.inv)) d.inv = p.inv.filter((x) => x && typeof x.s === "number").map((x) => ({ y: String(x.y).slice(0, 8), s: x.s, m: typeof x.m === "number" ? x.m : null }));
+  if (Array.isArray(p.books)) d.books = p.books.filter((x) => x && typeof x.t === "string").map((x) => ({ t: x.t, w: +x.w || 0, m: +x.m || 0, day: +x.day || 0 }));
   if (Array.isArray(p.wq)) d.wq = p.wq.filter((x) => typeof x === "string");
   if (Array.isArray(p.err)) d.err = p.err.filter((x) => x && typeof x.where === "string" && typeof x.text === "string").map((x) => ({ where: x.where, text: x.text, day: +x.day || 0 }));
   Object.keys(d.st).forEach((x) => { const r = d.st[x]; if (!r || typeof r.done !== "number") delete d.st[x]; });
@@ -4208,6 +4212,242 @@ document.addEventListener("change", (e) => {
     };
     r.readAsText(e.target.files[0]);
   }
+});
+/* ================= 到達の画面と語彙量テスト ================= */
+const VT_N = 100,
+  VT_BANDS = 5,
+  TARGET_WORDS = 5000;
+// 本は作成者の提案。語数の目安は実際の難しさとずれることがある
+const LADDER = [
+  {
+    w: 500,
+    t: "学習者向けの読み物（A1）",
+    d: "Alma Edizioni「Italiano facile」シリーズの500語レベル（例：Pasta per due）。音声つき。",
+  },
+  {
+    w: 1000,
+    t: "学習者向けの読み物（A1〜A2）",
+    d: "同シリーズの1000語レベル（例：Come hai detto che ti chiami?）。",
+  },
+  {
+    w: 1500,
+    t: "学習者向けの読み物（A2）",
+    d: "同シリーズの1500語レベル（例：Le magiche ricette di Matilda）。",
+  },
+  {
+    w: 2500,
+    t: "児童向けの冒険もの",
+    d: "Geronimo Stilton シリーズ（Piemme）。絵が多く、1冊が短い。",
+  },
+  {
+    w: 3500,
+    t: "現代の児童文学",
+    d: "Gianni Rodari「Favole al telefono」。短い話の集まりで、1話ずつ読める。",
+  },
+  {
+    w: 4500,
+    t: "児童文学の名作",
+    d: "Carlo Collodi「Le avventure di Pinocchio」原文、De Amicis「Cuore」。古い語が多いので注つきの版を。",
+  },
+];
+const AUDIO_LINKS = [
+  [
+    "Coffee Break Italian",
+    "入門から。無料のポッドキャスト",
+    "https://coffeebreaklanguages.com/coffeebreakitalian/",
+  ],
+  [
+    "LibriVox：Cuore",
+    "『クオーレ』の無料朗読（原文の水準になってから）",
+    "https://librivox.org/cuore-by-edmondo-de-amicis/",
+  ],
+];
+const totalHours = () =>
+  Math.round(
+    (Object.values(S.tm).reduce((a, b) => a + b, 0) / 3600 + S.extMin / 60) *
+      10,
+  ) / 10;
+const totalRead = () => S.rwords + S.books.reduce((a, b) => a + (b.w || 0), 0);
+let vtq = null;
+function startVocabTest() {
+  const n = LEXL.length,
+    size = Math.floor(n / VT_BANDS),
+    per = Math.floor(VT_N / VT_BANDS),
+    items = [];
+  for (let b = 0; b < VT_BANDS; b++) {
+    const slice = LEXL.slice(
+      b * size,
+      b === VT_BANDS - 1 ? n : (b + 1) * size,
+    ).filter((e) => e.pos !== "r");
+    shuffle(slice)
+      .slice(0, per)
+      .forEach((e) => {
+        const pool = shuffle(
+            LEXL.filter((x) => x.id !== e.id && x.pos === e.pos),
+          ),
+          o = [];
+        const seen = { [e.ja]: 1 };
+        for (const x of pool) {
+          if (o.length >= 3) break;
+          if (!seen[x.ja]) {
+            seen[x.ja] = 1;
+            o.push(x.ja);
+          }
+        }
+        items.push({
+          id: e.id,
+          it: e.it,
+          band: b,
+          correct: e.ja,
+          o: shuffle([e.ja].concat(o)),
+          sel: null,
+        });
+      });
+  }
+  vtq = {
+    items: shuffle(items),
+    i: 0,
+    right: Array(VT_BANDS).fill(0),
+    wrong: Array(VT_BANDS).fill(0),
+    size: Array(VT_BANDS).fill(0),
+    res: null,
+  };
+  items.forEach((x) => vtq.size[x.band]++);
+  go("vt");
+}
+function vtEstimate(q) {
+  // 4択の偶然の正解を差し引き（正解−誤答÷3）、語彙表の帯ごとに語数へ換算する。「わからない」は減点しない
+  const n = LEXL.length,
+    size = Math.floor(n / VT_BANDS);
+  let est = 0,
+    cnt = 0;
+  for (let b = 0; b < VT_BANDS; b++) {
+    const bandN = b === VT_BANDS - 1 ? n - size * (VT_BANDS - 1) : size;
+    const p = q.size[b]
+      ? Math.max(0, (q.right[b] - q.wrong[b] / 3) / q.size[b])
+      : 0;
+    est += p * bandN;
+    cnt += q.size[b];
+  }
+  // 無作為抽出の誤差の目安（95%）
+  const pAll = est / n,
+    se =
+      Math.sqrt(Math.max(pAll * (1 - pAll), 0.01) / Math.max(cnt, 1)) *
+      n *
+      1.96;
+  return { est: Math.round(est), margin: Math.round(se) };
+}
+function vVt() {
+  const q = vtq;
+  if (q.res)
+    return `<div class="center">${lumi()}<div class="big">約 ${q.res.est.toLocaleString()} 語</div>
+    <p class="cap">誤差は±${q.res.margin.toLocaleString()}語ほどです。この結果は語彙表の${LEXL.length.toLocaleString()}語の範囲での推定で、全体の語彙力ではありません。また意味を選べるかを見ており、聞いて分かるかは別です。</p></div>
+    <div class="bottom"><div class="in"><button class="btn green full" data-act="tab" data-v="goal">到達の画面へ</button></div></div>`;
+  const e = q.items[q.i];
+  return `<div class="ltop"><button class="x" data-act="tab" data-v="goal" aria-label="閉じる">×</button><div class="prog"><i style="width:${Math.max(4, Math.round((q.i / q.items.length) * 100))}%"></i></div></div>
+  <div class="lbody"><p class="cap">語彙量テスト ${q.i + 1} / ${q.items.length}</p><div class="ask">${esc(e.it)} の意味は？</div>
+  <div class="opts">${e.o.map((o, i) => `<button class="opt" data-act="vtans" data-v="${i}"><span class="k">${i + 1}</span><span>${esc(o)}</span></button>`).join("")}
+  <button class="opt" data-act="vtans" data-v="-1"><span class="k">?</span><span>わからない</span></button></div>
+  <p class="cap" style="margin-top:12px">当て推量はせず、知らない語は「わからない」を選んでください。答え合わせは出ません。</p></div>`;
+}
+function vGoal() {
+  const n = dataNotice();
+  if (n) return n;
+  const last = S.vt[S.vt.length - 1],
+    hours = totalHours(),
+    read = totalRead();
+  const age = last ? dayNum() - last.day : null;
+  const known = Object.values(S.w).filter((r) => r.box >= 3).length;
+  const bar = (v, m) =>
+    `<div class="meter" style="margin-top:6px"><i style="width:${Math.min(100, Math.round((v / m) * 100))}%"></i></div>`;
+  const nextBook =
+    LADDER.find((b) => (last ? last.est : known) < b.w) ||
+    LADDER[LADDER.length - 1];
+  return `<div class="ltop"><button class="x" data-act="tab" data-v="me" aria-label="戻る">${I.back}</button><h2 style="flex:1">到達の状況</h2></div>
+  <div class="lbody" style="padding-bottom:40px"><div class="stack">
+  <div class="tip">目標：イタリアの小学校を終える子どもが読める文章を、読んで聞いてわかること。話す・書くは同じ水準を目標にしていません。到達は保証できず、時間の目安も推定です。</div>
+  <div class="card"><p style="font-weight:800">語彙</p><p class="kb">定着してきた語 ${known.toLocaleString()}語／目標 ${TARGET_WORDS.toLocaleString()}語（下限）${last ? `<br>前回のテスト：約 ${last.est.toLocaleString()} 語（±${last.margin}、${age}日前）` : ""}</p>${bar(known, TARGET_WORDS)}
+   <button class="btn full" style="margin-top:12px" data-act="vtstart">語彙量テスト（${VT_N}問・約10分）</button><p class="cap" style="margin-top:6px">月に1回くらいが目安です。今の語彙表は${LEXL.length.toLocaleString()}語なので、それ以上は測れません。</p></div>
+  <div class="card"><p style="font-weight:800">読書と時間</p><p class="kb">読んだ語数 ${read.toLocaleString()}語<br>累計 ${hours}時間（目安は1,000〜1,500時間）</p>${bar(hours, 1000)}</div>
+  <div class="card"><p style="font-weight:800;margin-bottom:6px">INVALSI 小5の過去問（読解の基準）</p>
+   <p class="kb">公式の問題と採点基準で自分で採点し、ここに記録します。問題の著作権があるのでアプリには載せていません。語彙が3,000語を超えたころが、最初に試す目安です。</p>
+   <p style="margin:8px 0"><a href="https://invalsiopen.it/">INVALSIopen（公式の解説）</a></p>
+   ${S.inv.map((x) => `<p class="cap">${esc(x.y)}年：${x.s}%（全国平均 ${x.m == null ? "未記入" : x.m + "%"}）</p>`).join("")}
+   <div class="seg" style="margin-top:8px"><input id="invy" class="search" style="flex:1;min-width:80px" inputmode="numeric" placeholder="年度" aria-label="年度"><input id="invs" class="search" style="flex:1;min-width:80px" inputmode="numeric" placeholder="正答率%" aria-label="正答率"><input id="invm" class="search" style="flex:1;min-width:80px" inputmode="numeric" placeholder="全国平均%" aria-label="全国平均"></div>
+   <button class="btn full" style="margin-top:8px" data-act="invadd">記録する</button></div>
+  <h3 class="sectitle">次に読む本（アプリの外で）</h3>
+  <div class="card"><p class="kb">アプリの読み物だけでは量が足りません。今の目安：<b>${esc(nextBook.t)}</b><br>${esc(nextBook.d)}</p>
+   <details style="margin-top:8px"><summary class="cap">本の階段をすべて見る</summary>${LADDER.map((b) => `<p class="cap" style="margin-top:6px"><b>${b.w.toLocaleString()}語〜</b> ${esc(b.t)}：${esc(b.d)}</p>`).join("")}<p class="cap" style="margin-top:6px">提案であり、対象年齢や難しさは購入前に確かめてください。本の代金は別にかかります。</p></details></div>
+  <div class="card"><p style="font-weight:800;margin-bottom:6px">読んだ本・聞いた時間を記録</p>
+   <input id="bkt" class="search" placeholder="本や番組の名前" aria-label="名前">
+   <div class="seg" style="margin-top:8px"><input id="bkw" class="search" style="flex:1;min-width:100px" inputmode="numeric" placeholder="語数（1ページ約150語）" aria-label="語数"><input id="bkm" class="search" style="flex:1;min-width:100px" inputmode="numeric" placeholder="分" aria-label="時間（分）"></div>
+   <button class="btn full" style="margin-top:8px" data-act="bkadd">記録する</button>
+   ${S.books
+     .slice(-5)
+     .reverse()
+     .map(
+       (b) =>
+         `<p class="cap" style="margin-top:6px">${esc(b.t)}：${(b.w || 0).toLocaleString()}語・${b.m || 0}分</p>`,
+     )
+     .join("")}</div>
+  <h3 class="sectitle">聞く素材（アプリの外で）</h3>
+  <div class="stack">${AUDIO_LINKS.map((a) => `<div class="card"><a href="${a[2]}" style="font-weight:800">${esc(a[0])}</a><p class="cap">${esc(a[1])}</p></div>`).join("")}</div>
+  </div></div>`;
+}
+const numIn = (id) => {
+  const a = $(id);
+  const v = a && a.value != null ? parseInt(a.value, 10) : NaN;
+  return isFinite(v) ? v : null;
+};
+Object.assign(ACT, {
+  vtstart() {
+    startVocabTest();
+  },
+  vtans(v) {
+    const q = vtq,
+      e = q.items[q.i];
+    if (+v >= 0) {
+      if (e.o[+v] === e.correct) q.right[e.band]++;
+      else q.wrong[e.band]++;
+    }
+    q.i++;
+    if (q.i >= q.items.length) {
+      q.res = vtEstimate(q);
+      S.vt.push({ day: dayNum(), est: q.res.est, margin: q.res.margin });
+      save();
+    }
+    render();
+    window.scrollTo(0, 0);
+  },
+  invadd() {
+    const y = numIn("#invy"),
+      s = numIn("#invs"),
+      m = numIn("#invm");
+    if (y == null || s == null || s < 0 || s > 100) return;
+    S.inv.push({
+      y: String(y),
+      s,
+      m: m == null || m < 0 || m > 100 ? null : m,
+    });
+    save();
+    render();
+  },
+  bkadd() {
+    const a = $("#bkt"),
+      t = ((a && a.value) || "").trim(),
+      w = numIn("#bkw"),
+      m = numIn("#bkm");
+    if (!t || (w == null && m == null)) return;
+    S.books.push({
+      t,
+      w: Math.max(0, w || 0),
+      m: Math.max(0, m || 0),
+      day: dayNum(),
+    });
+    S.extMin += Math.max(0, m || 0);
+    save();
+    render();
+  },
 });
 function matchTry(e){
   if(e.sl==null||e.sr==null){render();return;}
